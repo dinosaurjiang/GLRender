@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>PhotoEncoder4Mac.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>0</integer>
+		</dict>
+		<key>ResourcePacker.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>9D0515D718710F5E00B246FA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9D0515F618710F5E00B246FA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9D7270E61872894200F9829E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9D75A4E8184EF4B300998DEC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9DA8EB771847231400D91848</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>
