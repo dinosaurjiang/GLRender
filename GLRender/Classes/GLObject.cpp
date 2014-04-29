@@ -20,7 +20,7 @@ GLObject2D::~GLObject2D()
     
 }
 
-//TODO: init
+
 GLObject2D::GLObject2D(const kmVec2 size,const kmVec2 pos)
 {
     _boundingBox.x = size.x;
@@ -212,13 +212,18 @@ void GLObjectContainer::visit()
 
 void GLObjectContainer::draw()
 {
+    // does need to do nothing?
     if( _alpha < 0.0001 || _hidden ) return;
+    
+    // OK...
     this->visit();
     
-    if(!_children) return;
-    
-    for (list<GLObjectBase *>::iterator it = _children->begin(); it != _children->end(); ++it) {
-        (*it)->draw();
+    if(_children)
+    {
+        for (list<GLObjectBase *>::iterator it = _children->begin(); it != _children->end(); ++it)
+        {
+            (*it)->draw();
+        }
     }
 }
 
@@ -280,7 +285,7 @@ void GLSprite::visit()
     
 #ifdef DEBUG
         if(_texture==nullptr)
-            LOG("glsprite has no texture.<%p>",this);
+            LOG("sprite has no texture.<%p>",this);
 #endif
     
     // disable color
@@ -360,14 +365,15 @@ void GLColorLayer::visit()
 
 void GLColorLayer::draw()
 {
-    
     if( _alpha < 0.0001 || _hidden ) return;
     this->visit();
     
-    if(!_children) return;
-    /// why
-    for (list<GLObjectBase *>::iterator it = _children->begin(); it != _children->end(); ++it) {
-        (*it)->draw();
+    if(_children)
+    {
+        for (list<GLObjectBase *>::iterator it = _children->begin(); it != _children->end(); ++it)
+        {
+            (*it)->draw();
+        }
     }
 }
 

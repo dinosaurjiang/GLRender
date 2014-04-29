@@ -21,7 +21,6 @@ using namespace std;
 
 /*
  this is texture obj for gl
- as I do, Image size must be not a NOPT image.
  */
 
 class GLTexture;
@@ -170,7 +169,9 @@ private:
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
-
+// texture manager.
+// should always load texture from here.
+// if have none-managed texture, pls cache it here, or delete by youself
 
 class GLTextureManager : public GLBase
 {
@@ -199,6 +200,7 @@ public:
         return &_manager_instance;
     }
     
+    // for none-managed texture, use this method to delete it.
     static void deleteTexture(GLTexture * texture)
     {
         if (texture)
@@ -219,7 +221,6 @@ private:
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
-
 
 
 class GLTextureFrameSheet

@@ -31,10 +31,12 @@ void GLObjectBase::updateTransform()
         kmMat4Multiply(&_transformMatrix, &(this->_parent->_transformMatrix),&_transformMatrix);
     
     // update child
-    if(_children == nullptr) return;
-    for (list<GLObjectBase *>::iterator it = _children->begin(); it != _children->end(); ++it)
+    if(_children)
     {
-        (*it)->updateTransform();
+        for (list<GLObjectBase *>::iterator it = _children->begin(); it != _children->end(); ++it)
+        {
+            (*it)->updateTransform();
+        }
     }
 }
 
@@ -43,7 +45,7 @@ void GLObjectBase::transform()
     if (_needRecomputeTransform)
     {
         // this is identify matrix.
-        // there may call forquntily
+        // this method may invoked frequently
         // so make this function run as faster as it can.
         kmMat4 origin;
         kmVec3 center = this->getAnchorPoint();
@@ -53,10 +55,11 @@ void GLObjectBase::transform()
         bool rotateFlag = false, scaleFlag = false;
         
         // scale
+        // TODO: there is only 2D scale. not 3D scale.
         if(!(kmAlmostEqual(_scale.x, 1.0) && kmAlmostEqual(_scale.y, 1.0)))
         {
             kmMat4 scale;
-            kmMat4Scaling(&scale, _scale.x, _scale.y,1.0);
+            kmMat4Scaling(&scale, _scale.x, _scale.y, 1.0);
             kmMat4Multiply(&origin, &scale, &origin);
             scaleFlag = true;
         }
@@ -121,7 +124,6 @@ GLObjectBase::~GLObjectBase()
         {
             GLObjectBase * temp = (GLObjectBase *)(*it);// get
             delete temp;// delete child
-            //_children->erase(it);// erase from list
         }
         delete _children;
         _children = nullptr;// to keep safe.
@@ -340,6 +342,10 @@ GLObjectBase * GLObjectBase::removeChildByTag(int tv,bool clean)
     }
     return tmp;
 }
+
+////////////////////////////////////////////////////////
+/////   以下未完成
+////////////////////////////////////////////////////////
 
 bool GLObjectBase::pointInside(kmVec2 pos2d)
 {

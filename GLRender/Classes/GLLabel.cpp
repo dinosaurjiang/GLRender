@@ -81,7 +81,7 @@ void GLMutableLineLabel::visit()
     
 #ifdef DEBUG
     if(_texture==nullptr)
-        LOG("glsprite has no texture.<%p>",this);
+        LOG("sprite has no texture.<%p>",this);
 #endif
     
     glEnableVertexAttribArray( ATTRIB_VERTEX );

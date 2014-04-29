@@ -89,7 +89,7 @@ public:
     kmMat4 * transformMatrixPtr(){ return &_transformMatrix; };
     kmMat4 transformMatrix(){ return _transformMatrix; };
     
-    void setAlphaValue(float v) { _alpha = v < 0.0001 ? 0.0 : (v > 1.0 ? 1.0 : v); };
+    void setAlphaValue(float v) { _alpha = v < 0.0002 ? 0.0 : (v > 1.0 ? 1.0 : v); };
     float getAlphaValue(){ return _alpha; };
     
     void setZDepth(int tv);

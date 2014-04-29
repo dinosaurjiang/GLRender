@@ -11,8 +11,10 @@
 #include <string.h>
 #include "ResFileLoader.h"
 
+
 #define CHECK_MYHANDER(_HANDLE_)\
-if (_HANDLE_ == NULL){ JJPrintf("THERE IS NO FILE HANDLE.");return JJFAILED;}
+if (_HANDLE_ == NULL){ DEBUG_LOG("THERE IS NO FILE HANDLE.");return JJFAILED;}
+
 
 #define CHECK_HANDER() CHECK_MYHANDER(curFileInstance)
 
@@ -26,7 +28,7 @@ int begin_read_file(const char * path)
 {
     if (curFileInstance)
     {
-        JJPrintf("there is a file is opened, please call end_read_file() first");
+        DEBUG_LOG("there is a file is opened, please call end_read_file() first");
         return JJFAILED;
     }
     
@@ -35,7 +37,7 @@ int begin_read_file(const char * path)
     
     if (!curFileInstance)
     {
-        JJPrintf("can not open file:%s",path);
+        DEBUG_LOG("can not open file:%s",path);
         return JJFAILED;
     }
     
@@ -45,7 +47,7 @@ int begin_read_file(const char * path)
     fseek(curFileInstance, 0, SEEK_SET);
     fseek(curFileInstance, 0,SEEK_END);
     fsize = ftell(curFileInstance);
-    JJPrintf("file size:%ld",fsize);
+    DEBUG_LOG("file size:%ld",fsize);
     
     // read file struct
     fseek(curFileInstance, (fsize - sizeof(ResFile)), SEEK_SET);
@@ -56,7 +58,7 @@ int begin_read_file(const char * path)
     
     if (fileHeader.totalLength != fsize)
     {
-        JJPrintf("file size != recorded \n");
+        DEBUG_LOG("file size != recorded. file maybe damaged.\n");
         end_read_file();
         return JJFAILED;
     }
@@ -74,7 +76,7 @@ int read_Lua_sources(char ** buff, int * length)
     
     if (!(*buff))
     {
-        JJPrintf("alloc mem failed");
+        DEBUG_LOG("alloc mem failed");
         return JJFAILED;
     }
     
@@ -82,7 +84,7 @@ int read_Lua_sources(char ** buff, int * length)
     size_t ret = fread(*buff, fileHeader.luaScriptUtf8Length, 1, curFileInstance);
     if (ret != 1)
     {
-        JJPrintf("read lua src failed:%zd",ret);
+        DEBUG_LOG("read lua src failed:%zd",ret);
         free(*buff);
         *buff = NULL;
         return JJFAILED;
@@ -117,7 +119,10 @@ int read_data_items(ReaderDataCallback callback, void * ctx)
         {
             buffer = malloc(tmp.dataLength+1);
             if(buffer==NULL)
-                JJPrintf("alloc memory failed");
+            {
+                DEBUG_LOG("alloc memory failed");
+                break;
+            }
             bzero(buffer, tmp.dataLength);
         }
         else
@@ -127,7 +132,10 @@ int read_data_items(ReaderDataCallback callback, void * ctx)
             {
                 buffer = realloc(buffer, tmp.dataLength+1);
                 if(buffer==NULL)
-                    JJPrintf("alloc memory failed");
+                {
+                    DEBUG_LOG("alloc memory failed");
+                    break;
+                }
             }
             
             bzero(buffer, tmp.dataLength);
@@ -148,17 +156,20 @@ int read_data_items(ReaderDataCallback callback, void * ctx)
         
         if (ret == 0) // read data failed.
         {
-            JJPrintf("read data from file failed");
-        }
-        
-        if (callback)
-        {
-            callback(type,itemName,dataLen,buffer,ctx);
+            DEBUG_LOG("read data from file failed");
         }
         else
         {
-            JJPrintf("NO CALLBACK TO RESPONSE.");
+            if (callback)
+            {
+                callback(type,itemName,dataLen,buffer,ctx);
+            }
+            else
+            {
+                DEBUG_LOG("NO CALLBACK TO RESPONSE.");
+            }
         }
+        
     }
     
     if(buffer)
@@ -194,14 +205,14 @@ int begin_write_file(const char * path)
 {
     if (write_handle)
     {
-        JJPrintf("there is a write handle opened, please call end Read first\n");
+        DEBUG_LOG("there is a write handle opened, please call end Write first\n");
         return JJFAILED;
     }
     
     write_handle = fopen(path, "wb");
     if (write_handle == NULL)
     {
-        JJPrintf("open write file failed\n");
+        DEBUG_LOG("open write file failed\n");
         return JJFAILED;
     }
     
@@ -221,7 +232,7 @@ int write_lua_sources(const char *src, unsigned int length)
     
     if (ret != 1)
     {
-        JJPrintf("write lua src failed:%zd\n",ret);
+        DEBUG_LOG("write lua src failed:%zd\n",ret);
         return JJFAILED;
     }
     
@@ -236,7 +247,7 @@ int write_data_item(const char * tname,const char * data, unsigned int length, D
  
     if (luaLength == 0)
     {
-        JJPrintf("please write lua src first.\n");
+        DEBUG_LOG("please write lua src first.\n");
         return JJFAILED;
     }
     
@@ -250,14 +261,14 @@ int write_data_item(const char * tname,const char * data, unsigned int length, D
     size_t ret = fwrite(&tmp, sizeof(DataCtx), 1, write_handle);
     if (ret != 1)
     {
-        JJPrintf("write item header failed:%zd\n",ret);
+        DEBUG_LOG("write item header failed:%zd\n",ret);
         return JJFAILED;
     }
     
     ret = fwrite(data, length, 1, write_handle);
     if (ret != 1)
     {
-        JJPrintf("write item data failed:%zd\n",ret);
+        DEBUG_LOG("write item data failed:%zd\n",ret);
         return JJFAILED;
     }
     
@@ -265,6 +276,7 @@ int write_data_item(const char * tname,const char * data, unsigned int length, D
     itemCounts++;
     return JJDONE;
 }
+
 
 void end_write_file()
 {
@@ -278,7 +290,7 @@ void end_write_file()
         size_t ret = fwrite(&writeHeader, sizeof(ResFile), 1, write_handle);
         if (ret != 1)
         {
-            JJPrintf("end file header failed:%zd\n",ret);
+            DEBUG_LOG("end file header failed:%zd\n",ret);
         }
         fclose(write_handle);
         
@@ -288,7 +300,7 @@ void end_write_file()
     }
     else
     {
-        JJPrintf("there's no handle to end\n");
+        DEBUG_LOG("there's no handle to end\n");
     }
 }
 

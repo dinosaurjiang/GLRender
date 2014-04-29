@@ -10,12 +10,22 @@
 #import "ResFileLoader.h"
 
 #define LUA_CODES_FILE_NAME @"Codes.lua"
+
 /*
- 把所有的资源文件放到一个文件夹里面
- 然后lua的文件名如上。
- 这个程序会打包里面所需的资源到 一个文件里面
+ 这个工具主要是用来打包一个场景需要用的资源文件的。
+ 一般一个场景包含有这些类型的文件:
+ 1.lua 代码。
+ 2.图片
+ 3.另外的数据文件：离子系统文件，各种json文件
+
  
- 命令： xxx | src folder | target file
+ 把所有的资源文件放到一个文件夹里面
+ 然后lua的文件名改成上面的宏定义的名字。
+ 方便程序去找。
+
+ 这个文件会打包预定义的文件类型到一个data文件里面。
+ 
+ 命令： cmd  | src folder path |  target file path
  */
 
 

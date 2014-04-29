@@ -19,7 +19,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+    
 #include <string.h>
+    
 #ifdef __cplusplus
 }
 #endif
@@ -33,7 +35,7 @@ typedef struct lua_State lua_State;
 using namespace std;
 
 /*
-* default back ground color
+* default background color
 * size is glview;
 *
 * also with lua build
@@ -56,7 +58,7 @@ public:
     bool loadResouceFromMemory(const char * buff, long length);
     
     ////////////////////////////////////////////////////////////////
-    //  liftcycel of lua.
+    //  lifecycel of lua.
     //  onInitLua 在new 完的时候调用
     //  onDestroyLua 在delete 的时候调用
     //  init lua 后 onSceneCreateElements。
@@ -85,7 +87,8 @@ public:
     // 参数请用LP 这个宏。
     LuaParam callLuaMethod(const char * method,...);
     
-    // auto call
+    
+    // auto invoked
     virtual void update(float dt);
 private:
     
