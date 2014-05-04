@@ -65,8 +65,6 @@
 		9D05164B18711F8900B246FA /* qqface.png in Resources */ = {isa = PBXBuildFile; fileRef = 9D05163F18711F8900B246FA /* qqface.png */; };
 		9D05165018711F8900B246FA /* shizi.png in Resources */ = {isa = PBXBuildFile; fileRef = 9D05164518711F8900B246FA /* shizi.png */; };
 		9D05165118711F8900B246FA /* test_frames.png in Resources */ = {isa = PBXBuildFile; fileRef = 9D05164618711F8900B246FA /* test_frames.png */; };
-		9D0516531871212500B246FA /* color.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 9D74CD51185997E2004134E2 /* color.fsh */; };
-		9D0516541871212500B246FA /* color.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 9D74CD52185997E2004134E2 /* color.vsh */; };
 		9D0516551871212500B246FA /* ParticleSystem.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 9D74CD53185997E2004134E2 /* ParticleSystem.fsh */; };
 		9D0516561871212500B246FA /* ParticleSystem.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 9D74CD54185997E2004134E2 /* ParticleSystem.vsh */; };
 		9D05169818714F8500B246FA /* lapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 9D05166218714F8500B246FA /* lapi.c */; };
@@ -105,6 +103,19 @@
 		9D7270EB1872894200F9829E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D7270EA1872894200F9829E /* main.m */; };
 		9D7270EF1872894200F9829E /* ResourcePacker.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9D7270EE1872894200F9829E /* ResourcePacker.1 */; };
 		9D7270F31872895B00F9829E /* ResFileLoader.c in Sources */ = {isa = PBXBuildFile; fileRef = 9D05163818711F6400B246FA /* ResFileLoader.c */; };
+		9D7F50BA1914A7E400C4768D /* ColorDraw.fsh in Sources */ = {isa = PBXBuildFile; fileRef = 9D7F50B41914A7E400C4768D /* ColorDraw.fsh */; };
+		9D7F50BB1914A7E400C4768D /* ColorDraw.vsh in Sources */ = {isa = PBXBuildFile; fileRef = 9D7F50B51914A7E400C4768D /* ColorDraw.vsh */; };
+		9D7F50BC1914A7E400C4768D /* TextColorMix.fsh in Sources */ = {isa = PBXBuildFile; fileRef = 9D7F50B61914A7E400C4768D /* TextColorMix.fsh */; };
+		9D7F50BD1914A7E400C4768D /* TextColorMix.vsh in Sources */ = {isa = PBXBuildFile; fileRef = 9D7F50B71914A7E400C4768D /* TextColorMix.vsh */; };
+		9D7F50BE1914A7E400C4768D /* TextureDraw.fsh in Sources */ = {isa = PBXBuildFile; fileRef = 9D7F50B81914A7E400C4768D /* TextureDraw.fsh */; };
+		9D7F50BF1914A7E400C4768D /* TextureDraw.vsh in Sources */ = {isa = PBXBuildFile; fileRef = 9D7F50B91914A7E400C4768D /* TextureDraw.vsh */; };
+		9D7FA12A1914F6EC00061A51 /* ColorDraw.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 9D7F50B41914A7E400C4768D /* ColorDraw.fsh */; };
+		9D7FA12B1914F6EC00061A51 /* ColorDraw.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 9D7F50B51914A7E400C4768D /* ColorDraw.vsh */; };
+		9D7FA12C1914F6EC00061A51 /* TextColorMix.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 9D7F50B61914A7E400C4768D /* TextColorMix.fsh */; };
+		9D7FA12D1914F6EC00061A51 /* TextColorMix.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 9D7F50B71914A7E400C4768D /* TextColorMix.vsh */; };
+		9D7FA12E1914F6EC00061A51 /* TextureDraw.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 9D7F50B81914A7E400C4768D /* TextureDraw.fsh */; };
+		9D7FA12F1914F6EC00061A51 /* TextureDraw.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 9D7F50B91914A7E400C4768D /* TextureDraw.vsh */; };
+		9D7FA13419167F5E00061A51 /* GLValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D7FA13219167F5E00061A51 /* GLValue.cpp */; };
 		9D8EF12918768D0700704CDC /* GLBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D8EF12718768D0700704CDC /* GLBase.cpp */; };
 /* End PBXBuildFile section */
 
@@ -273,6 +284,14 @@
 		9D7C790518629F7B00BD5694 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		9D7C79071862E6F300BD5694 /* GLOfflineRender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLOfflineRender.cpp; sourceTree = "<group>"; };
 		9D7C79081862E6F300BD5694 /* GLOfflineRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLOfflineRender.h; sourceTree = "<group>"; };
+		9D7F50B41914A7E400C4768D /* ColorDraw.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorDraw.fsh; sourceTree = "<group>"; };
+		9D7F50B51914A7E400C4768D /* ColorDraw.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ColorDraw.vsh; sourceTree = "<group>"; };
+		9D7F50B61914A7E400C4768D /* TextColorMix.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TextColorMix.fsh; sourceTree = "<group>"; };
+		9D7F50B71914A7E400C4768D /* TextColorMix.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TextColorMix.vsh; sourceTree = "<group>"; };
+		9D7F50B81914A7E400C4768D /* TextureDraw.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TextureDraw.fsh; sourceTree = "<group>"; };
+		9D7F50B91914A7E400C4768D /* TextureDraw.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TextureDraw.vsh; sourceTree = "<group>"; };
+		9D7FA13219167F5E00061A51 /* GLValue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLValue.cpp; sourceTree = "<group>"; };
+		9D7FA13319167F5E00061A51 /* GLValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLValue.h; sourceTree = "<group>"; };
 		9D845CD01851BF3200C87D26 /* GLTransitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLTransitions.h; sourceTree = "<group>"; };
 		9D845CD11851BFF500C87D26 /* GLTransitions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTransitions.cpp; sourceTree = "<group>"; };
 		9D8E4BC418558F3900E46CE5 /* TODO_list.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; name = TODO_list.rtf; path = Classes/TODO_list.rtf; sourceTree = "<group>"; };
@@ -577,6 +596,12 @@
 			children = (
 				9D74CD51185997E2004134E2 /* color.fsh */,
 				9D74CD52185997E2004134E2 /* color.vsh */,
+				9D7F50B41914A7E400C4768D /* ColorDraw.fsh */,
+				9D7F50B51914A7E400C4768D /* ColorDraw.vsh */,
+				9D7F50B61914A7E400C4768D /* TextColorMix.fsh */,
+				9D7F50B71914A7E400C4768D /* TextColorMix.vsh */,
+				9D7F50B81914A7E400C4768D /* TextureDraw.fsh */,
+				9D7F50B91914A7E400C4768D /* TextureDraw.vsh */,
 				9D74CD53185997E2004134E2 /* ParticleSystem.fsh */,
 				9D74CD54185997E2004134E2 /* ParticleSystem.vsh */,
 			);
@@ -686,6 +711,8 @@
 				9D7C79021862910C00BD5694 /* GLLabel.h */,
 				9DABDAF5186934750084043F /* GLScene.cpp */,
 				9DABDAF6186934750084043F /* GLScene.h */,
+				9D7FA13219167F5E00061A51 /* GLValue.cpp */,
+				9D7FA13319167F5E00061A51 /* GLValue.h */,
 				9D66F028186C207E00BE2C01 /* GLSceneTransform.cpp */,
 				9D66F029186C207E00BE2C01 /* GLSceneTransform.h */,
 				9DA8EBC518472B9200D91848 /* GLTexture.cpp */,
@@ -810,13 +837,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9D0516531871212500B246FA /* color.fsh in Resources */,
-				9D0516541871212500B246FA /* color.vsh in Resources */,
 				9D0516B8187155E700B246FA /* ext_lua_func.lua in Resources */,
 				9D0516551871212500B246FA /* ParticleSystem.fsh in Resources */,
 				9D0516561871212500B246FA /* ParticleSystem.vsh in Resources */,
 				9D0515E418710F5E00B246FA /* InfoPlist.strings in Resources */,
 				9D05165118711F8900B246FA /* test_frames.png in Resources */,
+				9D7FA12A1914F6EC00061A51 /* ColorDraw.fsh in Resources */,
+				9D7FA12B1914F6EC00061A51 /* ColorDraw.vsh in Resources */,
+				9D7FA12C1914F6EC00061A51 /* TextColorMix.fsh in Resources */,
+				9D7FA12D1914F6EC00061A51 /* TextColorMix.vsh in Resources */,
+				9D7FA12E1914F6EC00061A51 /* TextureDraw.fsh in Resources */,
+				9D7FA12F1914F6EC00061A51 /* TextureDraw.vsh in Resources */,
 				9D05165018711F8900B246FA /* shizi.png in Resources */,
 				9D0515F218710F5E00B246FA /* Images.xcassets in Resources */,
 				9D05164918711F8900B246FA /* particleTexture.png in Resources */,
@@ -854,7 +885,9 @@
 				9D05161A18710FBE00B246FA /* matrix.c in Sources */,
 				9D0516A118714F8500B246FA /* lgc.c in Sources */,
 				9D0516AD18714F8500B246FA /* lstring.c in Sources */,
+				9D7F50BA1914A7E400C4768D /* ColorDraw.fsh in Sources */,
 				9D05161B18710FBE00B246FA /* mat3.c in Sources */,
+				9D7F50BF1914A7E400C4768D /* TextureDraw.vsh in Sources */,
 				9D0516361871108900B246FA /* OpenGLManager.mm in Sources */,
 				9D05161C18710FBE00B246FA /* mat4.c in Sources */,
 				9D0516B118714F8500B246FA /* ltm.c in Sources */,
@@ -871,8 +904,10 @@
 				9D05162218710FBE00B246FA /* vec2.c in Sources */,
 				9D0516B518714F8500B246FA /* lzio.c in Sources */,
 				9D0516A418714F8500B246FA /* llex.c in Sources */,
+				9D7FA13419167F5E00061A51 /* GLValue.cpp in Sources */,
 				9D05162318710FBE00B246FA /* vec3.c in Sources */,
 				9D05162418710FBE00B246FA /* vec4.c in Sources */,
+				9D7F50BD1914A7E400C4768D /* TextColorMix.vsh in Sources */,
 				9D05169D18714F8500B246FA /* ldebug.c in Sources */,
 				9D0516AB18714F8500B246FA /* lparser.c in Sources */,
 				9D05162518710FBE00B246FA /* MD2Loader.cpp in Sources */,
@@ -889,6 +924,7 @@
 				9D05162818710FBE00B246FA /* GLLabel.cpp in Sources */,
 				9D0516B618714F8500B246FA /* print.c in Sources */,
 				9D05162918710FBE00B246FA /* GLScene.cpp in Sources */,
+				9D7F50BC1914A7E400C4768D /* TextColorMix.fsh in Sources */,
 				9D05162A18710FBE00B246FA /* GLSceneTransform.cpp in Sources */,
 				9D05169F18714F8500B246FA /* ldump.c in Sources */,
 				9D05162B18710FBE00B246FA /* GLTexture.cpp in Sources */,
@@ -897,6 +933,8 @@
 				9D0516A518714F8500B246FA /* lmathlib.c in Sources */,
 				9D0516A718714F8500B246FA /* loadlib.c in Sources */,
 				9D05169E18714F8500B246FA /* ldo.c in Sources */,
+				9D7F50BE1914A7E400C4768D /* TextureDraw.fsh in Sources */,
+				9D7F50BB1914A7E400C4768D /* ColorDraw.vsh in Sources */,
 				9D05162D18710FBE00B246FA /* GLBlender.cpp in Sources */,
 				9D0516A018714F8500B246FA /* lfunc.c in Sources */,
 				9D0516AA18714F8500B246FA /* loslib.c in Sources */,

@@ -314,10 +314,10 @@ void GLScene::callLuaMethodNoneReturn(const char * method)
     lua_pop(_luaState, 1);
 }
 
-LuaParam GLScene::callLuaMethod(const char * method,...)
+Value GLScene::callLuaMethod(const char * method,...)
 {
     
-    if(_luaState == NULL) return LuaParam();
+    if(_luaState == NULL) return Value();
     lua_getglobal(_luaState, method);
     
     int argc = 0;
@@ -328,27 +328,27 @@ LuaParam GLScene::callLuaMethod(const char * method,...)
     
     while (true)
     {
-        LuaParam * obj = va_arg(list, LuaParam*);
+        Value * obj = va_arg(list, Value*);
         
         if(obj == nullptr) break;
         
-        if (obj->vtype() == VT_NULL)
+        if (obj->type() == Value::NULLValue)
         {
             lua_pushnil(_luaState);
         }
-        else if (obj->vtype() == VT_String)
+        else if (obj->type() == Value::CString || obj->type() == Value::String)
         {
             lua_pushstring(_luaState, obj->asCString());
         }
-        else if(obj->vtype() == VT_Bool)
+        else if(obj->type() == Value::Bool)
         {
             lua_pushboolean(_luaState, obj->asBool());
         }
-        else if (obj->vtype() == VT_Double)
+        else if (obj->type() == Value::Double)
         {
             lua_pushnumber(_luaState, obj->asDouble());
         }
-        else if(obj->vtype() == VT_Int)
+        else if(obj->type() == Value::Int)
         {
             lua_pushinteger(_luaState, obj->asInt());
         }
@@ -368,20 +368,20 @@ LuaParam GLScene::callLuaMethod(const char * method,...)
     lua_call(_luaState, argc, 1);
     int type = lua_type(_luaState, -1);
     
-    LuaParam ret_obj;
+    Value ret_obj;
     switch (type)
     {
         case LUA_TNIL:
-            return LuaParam((int)lua_tointeger(_luaState, -1));
+            return Value((int)lua_tointeger(_luaState, -1));
             break;
         case LUA_TNUMBER:
-            return LuaParam(lua_tonumber(_luaState, -1));
+            return Value(lua_tonumber(_luaState, -1));
             break;
         case LUA_TBOOLEAN:
-            return LuaParam(lua_toboolean(_luaState, -1));
+            return Value(lua_toboolean(_luaState, -1));
             break;
         case LUA_TSTRING:
-            return LuaParam(lua_tostring(_luaState, -1));
+            return Value(lua_tostring(_luaState, -1));
             break;
         case LUA_TTABLE:
         case LUA_TFUNCTION:

@@ -16,5 +16,5 @@ void main()
     v_color = a_color;
     v_texCoord = a_texCoord;
     
-	gl_Position = a_pMatrix*a_mvMatrix*a_objMatrix*a_position;
+    gl_Position = a_pMatrix*a_mvMatrix*a_objMatrix*a_position;
 }

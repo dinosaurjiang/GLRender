@@ -13,7 +13,7 @@
 void UsingProgram(GLuint program)
 {
 #if OPEN_GL_CACHE
-    static GLuint _cache_program = 0;
+    static GLuint _cache_program = -1;
     if (program == _cache_program)
         return;
     
@@ -36,10 +36,10 @@ bool GLProgram::loadShadersByName(const char * vsh, const char * fsh)
 {
     string tvsh(vsh);
     string tfsh(fsh);
-    return this->loadShaders(tvsh, tfsh);
+    return this->loadShadersByName(tvsh, tfsh);
 }
 
-bool GLProgram::loadShaders(string & vsh, string & fsh)
+bool GLProgram::loadShadersByName(string & vsh, string & fsh)
 {
     char * vertexBuff = NULL;
     char * fragmentBuff = NULL;
@@ -96,12 +96,12 @@ bool GLProgram::loadShaders(const char * vsh, const char * fsh)
     // Attach fragment shader to program.
     glAttachShader(_program, fragShader);
     
+    
     // Bind attribute locations.
     // This needs to be done prior to linking.
     glBindAttribLocation(_program, ATTRIB_VERTEX,   "a_position");
     glBindAttribLocation(_program, ATTRIB_COLOR,    "a_color");
     glBindAttribLocation(_program, ATTRIB_TEXCOORD, "a_texCoord");
-    
     
     // Link program.
     if (!(this->linkProgram(_program)))
@@ -127,6 +127,7 @@ bool GLProgram::loadShaders(const char * vsh, const char * fsh)
         return false;
     }
     
+    this->updateAttrbu_Uniform();
     
     // Release vertex and fragment shaders.
     if (vertShader)
@@ -134,7 +135,6 @@ bool GLProgram::loadShaders(const char * vsh, const char * fsh)
     if (fragShader)
         glDeleteShader(fragShader);
     
-    this->updateAttrbu_Uniform();
     glActiveTexture(GL_TEXTURE0);
 //    glUniform1f(this->attributeForName(TEXTURE1), 0);
     
@@ -191,7 +191,7 @@ bool GLProgram::linkProgram(GLuint prog)
     {
         GLchar *log = (GLchar *)malloc(logLength);
         glGetProgramInfoLog(prog, logLength, &logLength, log);
-        LOG("link program failed. log:[%s]" , log);
+        LOG("link program log:[%s]" , log);
         free(log);
     }
 #endif
@@ -229,6 +229,8 @@ void GLProgram::updateAttrbu_Uniform()
     attrbute.clear();
     uniform.clear();
     
+    LOG("=====>START:%s<=====",__func__);
+    
     //Attributes
     const int MAX_NAME_LENGTH = 64;
     char rawName[MAX_NAME_LENGTH];
@@ -254,7 +256,16 @@ void GLProgram::updateAttrbu_Uniform()
         uniform[name] = glGetUniformLocation(_program, rawName);
         LOG("found uniforms:%s" , name.c_str() );
     }
+    
+    LOG("=====>END:%s<=====",__func__);
 }
+
+
+GLuint GLProgram::programID()
+{
+    return _program;
+}
+
 
 GLint GLProgram::attributeForName(std::string name)
 {

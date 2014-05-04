@@ -20,7 +20,6 @@
 #define OBJ_MATRIX "a_objMatrix"
 #define PROJECT_MATRIX "a_pMatrix"
 #define MV_MATRIX "a_mvMatrix"
-#define PIX_MODE "a_mode"
 #define ALPHA "a_alpha"
 #define TEXTURE1 "a_texCoord"
 
@@ -32,14 +31,12 @@ enum Uniform
     GL_objMatrix,
     GL_pMatrix,// project matrix
     GL_mvMatrix,// model view matrix
-    GL_mode, // color ? texture ? both?
     GL_alpha,
     GL_texture1,
     N_Uniform
 };
 
 
-// 这三个是固定的，必须有的
 enum
 {
     ATTRIB_VERTEX,
@@ -50,7 +47,31 @@ enum
 };
 
 
+
+// let OpenGL Using program.
+// but this func can cache previous use.
+// and will update program if need.
 void UsingProgram(GLuint program);
+
+
+
+
+#define STATIC_PROGROM( NAME, VSH, FSH) \
+static GLProgram * default ## NAME ## Program () \
+{ \
+    static GLProgram * NAME ## _instance = nullptr; \
+    if ( NAME ## _instance == nullptr ) \
+    { \
+        NAME ## _instance = new GLProgram(); \
+        if( NAME ## _instance->loadShadersByName(VSH,FSH) == false) \
+        {\
+            Exception("load failed.", "can not load program for OpenGL:"  VSH  "," FSH);\
+        }\
+    }\
+    return NAME ## _instance;\
+};
+
+
 
 
 using namespace std;
@@ -65,30 +86,29 @@ public:
     GLProgram() = default;
     ~GLProgram();
     
+    /*  load GLSL with given name of files.
+     */
     bool loadShadersByName(const char * vsh, const char * fsh);
-    bool loadShaders(string & vsh, string & fsh);
+    bool loadShadersByName(string & vsh, string & fsh);
+    
+    /*  load with GLSL srouces strings.
+     */
     bool loadShaders(const char * vsh, const char * fsh);
     bool validateProgram(GLuint prog);
     
-    static GLProgram * defaultProgram()
-    {
-        static GLProgram * _instance = nullptr;
-        if (_instance == nullptr)
-        {
-            _instance = new GLProgram();
-            if(_instance->loadShaders(defaultVertexShader,defaultFregmentShader) == false)
-            {
-                Exception("load failed.", "can not load default program for OpenGL");
-            }
-        }
-        return _instance;
-    };
     
-    GLuint programID()
-    {
-        return _program;
-    }
+    // default programs.
+    STATIC_PROGROM(ColorDraw,"ColorDraw.vsh","ColorDraw.fsh")
     
+    STATIC_PROGROM(TextureDraw,"TextureDraw.vsh","TextureDraw.fsh")
+    
+    STATIC_PROGROM(TextureColorDraw,"TextColorMix.vsh","TextColorMix.fsh")
+    
+    STATIC_PROGROM(ParticleSystem,"ParticleSystem.vsh","ParticleSystem.fsh")
+    
+    
+    
+    GLuint programID();
     GLint attributeForName(string name);
     GLint uniformForName(string name);
     
@@ -97,6 +117,7 @@ private:
     void updateAttrbu_Uniform();
     bool compileShader(GLuint * shader, GLenum type ,const GLchar * source);
     bool linkProgram(GLuint prog);
+    
     GLuint _program = 0;
     
     map<string, GLint> attrbute;

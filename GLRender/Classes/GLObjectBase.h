@@ -122,7 +122,7 @@ public:
     //////////////////////////////
     // for pick up
     // TODO: not finished.
-    // warnning: can not use nows.
+    // warnning: can not use now.
     //////////////////////////////
     bool pointInside(kmVec2 pos2d);
     bool pointInside(float x, float y);

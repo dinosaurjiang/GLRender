@@ -64,7 +64,7 @@ typedef struct _resFile
 #ifdef DEBUG
     #define DEBUG_LOG(format,...) printf("File: "__FILE__", Line: %05d: " format "\n", __LINE__, ##__VA_ARGS__)  
 #else  
-    #define DEBUG_LOG(format,...)  
+    #define DEBUG_LOG(format,...)  do{}while(0)
 #endif  
 
 ////////////////////////////////////////////////

@@ -9,6 +9,7 @@
 #include "GLLabel.h"
 #include "GLProgram.h"
 #include "GLTexture.h"
+#include "GLSupport.h"
 
 using namespace std;
 
@@ -60,12 +61,27 @@ GLMutableLineLabel::GLMutableLineLabel(string & text,float fontSize,string & fon
 
 void GLMutableLineLabel::usePorgram()
 {
-    GLSprite::usePorgram();
+    UsingProgram(GLProgram::defaultTextureColorDrawProgram()->programID());
     
-    GLuint tt;
-    if( (tt=GLProgram::defaultProgram()->uniformForName(PIX_MODE)) !=-1 )
+    GLint t;
+    if( (t=GLProgram::defaultTextureColorDrawProgram()->uniformForName(OBJ_MATRIX)) !=-1 )
     {
-        glUniform1f(tt, 10);////// for drawing mode, blend text and color
+        glUniformMatrix4fv(t, 1, 0,this->_transformMatrix.mat);
+    }
+    
+    if( (t=GLProgram::defaultTextureColorDrawProgram()->uniformForName(PROJECT_MATRIX)) !=-1 )
+    {
+        glUniformMatrix4fv(t, 1, 0, GLSupport::projectionMatrix->mat);
+    }
+    
+    if( (t=GLProgram::defaultTextureColorDrawProgram()->uniformForName(MV_MATRIX)) !=-1 )
+    {
+        glUniformMatrix4fv(t, 1, 0, GLSupport::modelViewMatrix->mat);
+    }
+    
+    if( (t=GLProgram::defaultTextureColorDrawProgram()->uniformForName(ALPHA)) !=-1 )
+    {
+        glUniform1f(t, this->getAlphaValue());
     }
 }
 
@@ -73,6 +89,8 @@ void GLMutableLineLabel::visit()
 {
     this->transform();
     this->usePorgram();
+    
+    
     _blend.blend();
     if(_texture)_texture->bind();
     

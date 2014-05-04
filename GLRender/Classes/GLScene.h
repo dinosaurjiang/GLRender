@@ -14,7 +14,7 @@
 #include <vector>
 #include <map>
 #include "ResFileLoader.h"
-
+#include "GLValue.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,7 +42,7 @@ using namespace std;
 */
 class GLTextureFrameSheet;
 class LuaParam;
-#define LP(v) (new LuaParam(v))
+#define LP(v) (new Value(v))
 
 class GLScene : public GLColorLayer
 {
@@ -85,7 +85,7 @@ public:
     
     // 调用lua 函数，有参数(>0个)  一个返回值。
     // 参数请用LP 这个宏。
-    LuaParam callLuaMethod(const char * method,...);
+    Value callLuaMethod(const char * method,...);
     
     
     // auto invoked
@@ -144,179 +144,6 @@ private:
                           long datalen,
                           char * buff,
                           void * ctx);
-};
-
-
-////////////////////////////////////////////////////////
-#pragma mark -
-////////////////////////////////////////////////////////
-
-typedef enum ValType
-{
-    VT_Unknow,
-    VT_NULL,
-    VT_String,
-    VT_CString = VT_String,
-    VT_Double,
-    VT_Int,
-    VT_Bool
-}ValType;
-
-//TODO: 当拷贝的时候会出错。因为里面有指针。
-// test test
-class LuaParam
-{
-public:
-    ~LuaParam()
-    {
-        this->freeMemory();
-    }
-    
-    LuaParam()
-    {
-        type = VT_NULL;
-    }
-    
-    LuaParam(int v)
-    {
-        type = VT_Int;
-        valuse = malloc(sizeof(int));
-        *((int *)valuse) = v;
-    }
-    
-    LuaParam(double v)
-    {
-        type = VT_Double;
-        valuse = malloc(sizeof(double));
-        *((double *)valuse) = v;
-    }
-    
-    LuaParam(bool v)
-    {
-        type = VT_Bool;
-        valuse = malloc(sizeof(int));
-        *((int *)valuse) = v?1:0;
-    }
-    
-    LuaParam(const char * v)
-    {
-        type = VT_String;
-        valuse = new string(v);
-    }
-    
-    LuaParam(string & v)
-    {
-        type = VT_String;
-        valuse = new string(v);
-    }
-    
-    int asInt()
-    {
-        switch (type) {
-            case VT_Bool:
-            case VT_Int:return *((int *)valuse); break;
-            case VT_Double:return (*((double *)valuse)); break;
-            case VT_NULL:
-            case VT_String:
-            default:
-                break;
-        }
-        return 0;
-    }
-    double asDouble()
-    {
-        switch (type) {
-            case VT_Bool:
-            case VT_Int:return  (*((int *)valuse)) * 1.0; break;
-            case VT_Double:return (*((double *)valuse)); break;
-            case VT_NULL:
-            case VT_String:
-            default:
-                break;
-        }
-        return .0f;
-    }
-    
-    bool asBool()
-    {
-        switch (type) {
-            case VT_Bool:
-            case VT_Int:return  (*((int *)valuse))? true : false; break;
-            case VT_Double:
-            case VT_NULL:
-            case VT_String:
-            default:
-                break;
-        }
-        return false;
-    }
-    
-    string * asString()
-    {
-        switch (type)
-        {
-            case VT_String: return static_cast<string *>(valuse); break;
-            case VT_Bool:
-            case VT_Int:
-            case VT_Double:
-            case VT_NULL:
-            default:
-                break;
-        }
-        return nullptr;
-    }
-    const char *asCString()
-    {
-        return this->asString()->c_str();
-    }
-    
-    void * asNull()
-    {
-        return nullptr;
-    }
-    
-    ValType vtype(){ return  type; };
-    LuaParam & operator=(LuaParam & lp)
-    {
-        this->freeMemory();
-        this->type = lp.type;
-        
-        switch (this->type) {
-            case VT_String: this->valuse = new string(lp.asCString()); break;
-            case VT_Bool:
-            case VT_Int:
-            {
-                valuse = malloc(sizeof(int));
-                *((int *)valuse) = lp.asInt();
-            }
-                break;
-            case VT_Double:
-            {
-                valuse = malloc(sizeof(double));
-                *((double *)valuse) = lp.asDouble();
-            }
-                break;
-            case VT_NULL:
-            default:
-                break;
-        }
-        
-        return *this;
-    }
-private:
-    ValType type;
-    void * valuse;
-    
-    void freeMemory()
-    {
-        if(type == VT_String)
-            delete static_cast<string*>(valuse);
-        else if(type != VT_NULL)
-            free(valuse);
-        
-        type = VT_Unknow;
-        valuse = NULL;
-    }
 };
 
 

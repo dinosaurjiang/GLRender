@@ -327,7 +327,6 @@ protected:
     
     
     bool addParticle();
-    GLProgram * ParticleSYSProgram();
     virtual void init(unsigned int particleCount);
 private:
     void initParticle(Particle * p);

@@ -62,7 +62,7 @@ void GLSceneTransform::drawFromTexture()
     if ( _fromQuadCount < 1 || _fromQuadList == nullptr ) return;
     
     GLint t;
-    if( (t=GLProgram::defaultProgram()->uniformForName(ALPHA)) !=-1 )
+    if( (t=GLProgram::defaultTextureColorDrawProgram()->uniformForName(ALPHA)) !=-1 )
         glUniform1f(t, this->_fromAlpha);
     
     
@@ -98,7 +98,7 @@ void GLSceneTransform::drawToTexture()
     if (_toQuadCount < 1 || _toQuadList == nullptr) return;
     
     GLint t;
-    if( (t=GLProgram::defaultProgram()->uniformForName(ALPHA)) !=-1 )
+    if( (t=GLProgram::defaultTextureDrawProgram()->uniformForName(ALPHA)) !=-1 )
         glUniform1f(t, this->_toAlpha);
     
     
@@ -161,27 +161,22 @@ void GLSceneTransform::draw()
 
 void GLSceneTransform::usePorgram()
 {
-    UsingProgram(GLProgram::defaultProgram()->programID());
+    UsingProgram(GLProgram::defaultTextureDrawProgram()->programID());
     
     GLint t;
-    if( (t=GLProgram::defaultProgram()->uniformForName(OBJ_MATRIX)) !=-1 )
+    if( (t=GLProgram::defaultTextureDrawProgram()->uniformForName(OBJ_MATRIX)) !=-1 )
     {
         glUniformMatrix4fv(t, 1, 0,this->_transformMatrix.mat);
     }
     
-    if( (t=GLProgram::defaultProgram()->uniformForName(PROJECT_MATRIX)) !=-1 )
+    if( (t=GLProgram::defaultTextureDrawProgram()->uniformForName(PROJECT_MATRIX)) !=-1 )
     {
         glUniformMatrix4fv(t, 1, 0, GLSupport::projectionMatrix->mat);
     }
     
-    if( (t=GLProgram::defaultProgram()->uniformForName(MV_MATRIX)) !=-1 )
+    if( (t=GLProgram::defaultTextureDrawProgram()->uniformForName(MV_MATRIX)) !=-1 )
     {
         glUniformMatrix4fv(t, 1, 0, GLSupport::modelViewMatrix->mat);
-    }
-    
-    if( (t=GLProgram::defaultProgram()->uniformForName(PIX_MODE)) !=-1 )
-    {
-        glUniform1f(t, 0);////// for drawing mode
     }
 }
 

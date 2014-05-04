@@ -19,6 +19,7 @@ public:
     
 	//! source blend function
 	unsigned int src = GL_ONE;
+    
 	//! destination blend function
 	unsigned int dst = GL_ONE_MINUS_SRC_ALPHA;
     

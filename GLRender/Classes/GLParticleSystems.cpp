@@ -14,7 +14,7 @@
 #include "GLProgram.h"
 #include "GLSupport.h"
 #include "reader.h"
-#include "DefaultShader.h"
+//#include "DefaultShader.h"
 
 
 
@@ -205,19 +205,21 @@ void GLParticleSystem::initGLParticleSystem(const char * json_data, unsigned lon
         }
         else
         {
-            ///////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////
             Exception("BAD ARGC", "Why running here, this is not need.");
             // this is cocos2d-way:
             // cocos2d load texture data(base64 encode)
-            // 1,decode,2 flat zip data
+            // 1,decode,
+            // 2 flat zip data
             // 3, create texture.
-            //////////////////////////////
+            /////////////////////////////////////////////////////////////////////
             // but I donot want to implments this methods.
             // because decode waste of CPU and time.
             // In my indived file formats.
             // image was store as data.
             // and when it loaded. image will be first load as gltexture.
             // just find it from texture manager is OK.
+            /////////////////////////////////////////////////////////////////////
         }
     }
 	
@@ -261,21 +263,6 @@ void GLParticleSystem::init(unsigned int numberOfParticles)
     
     //for batchNode
     _transformSystemDirty = false;
-}
-
-GLProgram * GLParticleSystem::ParticleSYSProgram()
-{
-    // make it always live in GPU
-    static GLProgram * _particleProgram = nullptr;
-    if (!_particleProgram)
-    {
-        _particleProgram = new GLProgram();//ParticleSystem
-        if(_particleProgram->loadShaders(defaultParticleVertexShader, defaultParticleFregmentShader) == false)
-        {
-            Exception("PROGRAM LOAD FAILED", "failed to load shaders for particle system.");
-        }
-    }
-    return _particleProgram;
 }
 
 
@@ -849,20 +836,20 @@ void GLParticleSystem::updateBlendFunc()
 
 void GLParticleSystemQuad::usePorgram()
 {
-    UsingProgram(this->ParticleSYSProgram()->programID());
+    UsingProgram(GLProgram::defaultParticleSystemProgram()->programID());
     
     GLint t;
-    if( (t=this->ParticleSYSProgram()->uniformForName(OBJ_MATRIX)) !=-1 )
+    if( (t=GLProgram::defaultParticleSystemProgram()->uniformForName(OBJ_MATRIX)) !=-1 )
     {
         glUniformMatrix4fv(t, 1, 0,this->_transformMatrix.mat);
     }
     
-    if( (t=this->ParticleSYSProgram()->uniformForName(PROJECT_MATRIX)) !=-1 )
+    if( (t=GLProgram::defaultParticleSystemProgram()->uniformForName(PROJECT_MATRIX)) !=-1 )
     {
         glUniformMatrix4fv(t, 1, 0, GLSupport::projectionMatrix->mat);
     }
     
-    if( (t=this->ParticleSYSProgram()->uniformForName(MV_MATRIX)) !=-1 )
+    if( (t=GLProgram::defaultParticleSystemProgram()->uniformForName(MV_MATRIX)) !=-1 )
     {
         glUniformMatrix4fv(t, 1, 0, GLSupport::modelViewMatrix->mat);
     }

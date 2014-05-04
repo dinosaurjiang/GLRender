@@ -14,6 +14,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+    
     // color [0-255]
     struct Color4B
     {
@@ -33,6 +34,8 @@ extern "C" {
         return c;
     }
     
+    
+    // for 2D sprite
     struct PerPointInfo
     {
         float  vertices[2]; // vertices
@@ -102,6 +105,7 @@ public:
     virtual void draw();
     virtual void usePorgram();
     
+    
     // 2d size.
     void setSize(float w, float h);
     void setSize(kmVec2 sv);
@@ -110,12 +114,14 @@ public:
     
     void setTexture(GLTexture * tex);
     GLTexture * getTexture();
+
     
     // set color
     void setColor(Color4B start, Color4B end);
     void setColor(Color4B color);
     void setStartColor(Color4B color);
     void setEndColor(Color4B color);
+    
     
 protected:
     GLBlender               _blend;
@@ -132,6 +138,7 @@ protected:
 
 ///////////////////////////////////////////////////////////////////////////
 // container only draw child. not draw itself.
+///////////////////////////////////////////////////////////////////////////
 class GLObjectContainer : public GLObject2D
 {
 public:
@@ -149,10 +156,11 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
 // sprite will draw it self first
 // then draw child.
 // not draw color .
+///////////////////////////////////////////////////////////////////////////
+
 class GLSprite : public GLObjectContainer
 {
 public:
@@ -170,10 +178,11 @@ public:
 
 
 ///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
 // GLColorLayer will draw itself first
 // then draw child.
 // only draw the color
+///////////////////////////////////////////////////////////////////////////
+
 class GLColorLayer : public GLObjectContainer
 {
 public:
