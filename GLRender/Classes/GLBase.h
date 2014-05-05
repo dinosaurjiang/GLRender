@@ -14,7 +14,7 @@
 
 /*
 	所有类的基础类。
-	主要功能就是声明了类的class。
+	主要功能:声明了类的class。
 */
 
 #define DECLARE_CLASS(_CLASS_) \

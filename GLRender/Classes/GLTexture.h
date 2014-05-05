@@ -182,7 +182,6 @@ public:
     GLTexture * createTextureWithImageName(const char *  c_name);
     GLTexture * createTextureWithImageName(string & name);
     GLTexture * createTextureWithPNGDataAndName(const void * bytes, unsigned long length,string & name);
-    GLTexture * createTextureWithPVRDataAndName(const void * bytes, unsigned long length,string & name);
     GLTexture * getTextureWithName(string & name);
     
     bool cacheTexture(GLTexture * texture,const char * cname);

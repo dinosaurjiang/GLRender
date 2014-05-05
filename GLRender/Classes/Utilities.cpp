@@ -27,7 +27,7 @@ unsigned long nextPOTValue(unsigned long x)
 
 
 
-std::string string_format(const char *fmt, ...)
+std::string * string_format(const char *fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
@@ -38,7 +38,7 @@ std::string string_format(const char *fmt, ...)
     
     va_end(ap);
     
-    return std::string(buffer);
+    return new std::string(buffer);
 }
 
 
@@ -50,8 +50,7 @@ std::string lastPathComponent(std::string & path)
 #else
     p =  path.rfind('/');
 #endif
-    std::string s2(path, p + 1);
-    return s2;
+    return std::string(path, p + 1);
 }
 
 

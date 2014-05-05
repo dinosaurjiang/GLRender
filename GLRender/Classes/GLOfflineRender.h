@@ -34,7 +34,7 @@
  endRender()
  
  
- object was render to pixels formt RGBA.
+ object was render to pixels format:RGBA.
  
  */
 

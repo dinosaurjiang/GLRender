@@ -12,11 +12,13 @@
 #import <ImageIO/ImageIO.h>
 #import <CoreGraphics/CoreGraphics.h>
 
+
 #ifdef TARGET_IOS
 #include <OpenGLES/ES2/gl.h>
 #else
 #include <OpenGL/gl.h>
 #endif
+
 
 #include "GLRenderDef.h"
 #include "Utilities.h"
@@ -44,6 +46,8 @@ TextureInfo createGLTextureWithPNGImageDataAPPLE(const void * bytes,long length 
 TextureInfo createGLTextureWithCGImage(void * cgimage)
 {
     CGImageRef image = (CGImageRef)cgimage;
+    
+    
     size_t img_w = CGImageGetWidth(image);
     size_t img_h = CGImageGetHeight(image);
     
@@ -106,15 +110,6 @@ TextureInfo createGLTextureWithCGImage(void * cgimage)
     return tinfo;
 }
 
-TextureInfo createGLTextureWithPVRDataAPPLE(const void * bytes,long length)
-{
-    TextureInfo tinfo;
-#if TARGET_IOS
-#else
-    Exception("FUNCTION CAN NOT USED", "ONLY IOS USE PVR DATA.");
-#endif
-    return tinfo;
-}
 
 TextureInfo createGLTextureWithImageNameAPPLE(std::string & name)
 {
@@ -133,136 +128,11 @@ TextureInfo createGLTextureWithImageNameAPPLE(std::string & name)
     
     if ([[[fileName pathExtension] lowercaseString] isEqualToString:@"pvr"])
     {
-        return createGLTextureWithPVRDataAPPLE([data bytes], [data length]);
+        LOG("pvr current not support.");
     }
     return TextureInfo();
 }
 
-#if TARGET_MAC
-#import <AppKit/AppKit.h>
-#endif
-
-TextureInfo createGLTextureWithString(std::string & text,float fontSize,std::string & fontName,GLHTextAlignment halign,GLVTextAlignment valign,GLLineBreakMode breakMode,float  boxWidth ,float boxHeight)
-{
-    //// Abstracted Attributes
-    NSString* textContent = [NSString stringWithCString:text.c_str()
-                                               encoding:NSUTF8StringEncoding];
-    
-    NSString* textFont = [NSString stringWithCString:fontName.c_str()
-                                               encoding:NSUTF8StringEncoding];
-    
-    
-    //// Text Drawing
-    NSMutableParagraphStyle* textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
-    [textStyle setAlignment: (NSTextAlignment)halign];
-    [textStyle setLineBreakMode:(NSLineBreakMode)breakMode];
-    
-    
-#if TARGET_MAC
-    NSDictionary* textFontAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        [NSFont fontWithName:textFont size:fontSize], NSFontAttributeName,
-                                        [NSColor whiteColor], NSForegroundColorAttributeName,
-                                        textStyle, NSParagraphStyleAttributeName, nil];
-    NSSize tsize = {boxWidth, boxHeight};
-#else
-    NSDictionary* textFontAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-                                        [UIFont fontWithName:textFont size:fontSize], NSFontAttributeName,
-                                        [UIColor whiteColor], NSForegroundColorAttributeName,
-                                        textStyle, NSParagraphStyleAttributeName, nil];
-    CGSize tsize = {boxWidth, boxHeight};
-#endif
-    if (boxWidth < 1.0 || boxHeight < 1.0)
-    {
-        // user did not given box to draw.
-        // use single line mode
-        tsize = [textContent sizeWithAttributes:textFontAttributes];
-    }
-    
-    
-#if TARGET_MAC
-    NSRect textRect = {0,0,tsize.width,tsize.height};
-#else
-    CGRect textRect = {0,0,tsize.width,tsize.height};
-#endif
-    
-    
-    
-    
-    size_t img_w = tsize.width;
-    size_t img_h = tsize.height;
-    
-    
-    size_t width = img_w;
-    size_t height = img_h;
-    
-    if(GLSupport::supportsNPOT() == false)
-    {
-        width = nextPOTValue(img_w);
-        height = nextPOTValue(img_h);
-    }
-    
-    
-    glEnable(GL_TEXTURE_2D);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    
-    
-    //hasPremultipliedAlpha
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    void *imageData = malloc(height * width * 4);
-    CGContextRef context = CGBitmapContextCreate( imageData, width, height, 8, 4 * width, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
-    
-    
-    
-//#if TARGET_IOS
-    CGContextTranslateCTM (context, 0, height);
-    CGContextScaleCTM (context, 1.0, -1.0);
-//#endif
-    
-    // draw string
-    CGContextClearRect(context, CGRectMake(0, 0, width, height));
-    
-#if TARGET_MAC
-    NSGraphicsContext * nsctx = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:NO];
-    [NSGraphicsContext saveGraphicsState];
-    [NSGraphicsContext setCurrentContext:nsctx];
-    [textContent drawInRect: textRect withAttributes: textFontAttributes];
-    [NSGraphicsContext restoreGraphicsState];
-#elif TARGET_IOS
-    UIGraphicsPushContext(context);
-    [textContent drawInRect:textRect withAttributes:textFontAttributes];
-    UIGraphicsPopContext();
-#else
-#error "Can not enter here."
-#endif
-    
-    CGContextRelease(context);
-    CGColorSpaceRelease( colorSpace );
-    
-    
-    TextureInfo tinfo;
-    tinfo.width = (unsigned int)width;
-    tinfo.height = (unsigned int)height;
-    tinfo._MaxT = (unsigned int)img_w;
-    tinfo._MaxS = (unsigned int)img_h;
-    
-    
-    glGenTextures(1, &(tinfo.glName));
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture(GL_TEXTURE_2D, tinfo.glName );
-    
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (int)width, (int)height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
-    
-    free(imageData);
-    
-    return tinfo;
-}
 
 TextureInfo createGLTextureWithRGBAData(unsigned char * imageData,
                                         long width, long height,
@@ -409,13 +279,152 @@ bool saveCGImageToPath(const char * path, void * cgimage)
 
 #pragma mark -
 ////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
+
+
+
+#if TARGET_MAC
+#import <AppKit/AppKit.h>
+#endif
+
+
+
+TextureInfo createGLTextureWithString(std::string & text,
+                                      float fontSize,
+                                      std::string & fontName,
+                                      GLHTextAlignment halign,
+                                      GLVTextAlignment valign,
+                                      GLLineBreakMode breakMode,
+                                      float  boxWidth ,
+                                      float boxHeight)
+{
+    //// Abstracted Attributes
+    NSString* textContent = [NSString stringWithCString:text.c_str()
+                                               encoding:NSUTF8StringEncoding];
+    
+    NSString* textFont = [NSString stringWithCString:fontName.c_str()
+                                            encoding:NSUTF8StringEncoding];
+    
+    
+    //// Text Drawing
+    NSMutableParagraphStyle* textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+    [textStyle setAlignment: (NSTextAlignment)halign];
+    [textStyle setLineBreakMode:(NSLineBreakMode)breakMode];
+    
+    
+#if TARGET_MAC
+    NSDictionary* textFontAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        [NSFont fontWithName:textFont size:fontSize], NSFontAttributeName,
+                                        [NSColor whiteColor], NSForegroundColorAttributeName,
+                                        textStyle, NSParagraphStyleAttributeName, nil];
+    NSSize tsize = {boxWidth, boxHeight};
+#else
+    NSDictionary* textFontAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        [UIFont fontWithName:textFont size:fontSize], NSFontAttributeName,
+                                        [UIColor whiteColor], NSForegroundColorAttributeName,
+                                        textStyle, NSParagraphStyleAttributeName, nil];
+    CGSize tsize = {boxWidth, boxHeight};
+#endif
+    if (boxWidth < 1.0 || boxHeight < 1.0)
+    {
+        // user did not given box to draw.
+        // use single line mode
+        tsize = [textContent sizeWithAttributes:textFontAttributes];
+    }
+    
+    
+#if TARGET_MAC
+    NSRect textRect = {0,0,tsize.width,tsize.height};
+#else
+    CGRect textRect = {0,0,tsize.width,tsize.height};
+#endif
+    
+    
+    
+    
+    size_t img_w = tsize.width;
+    size_t img_h = tsize.height;
+    
+    
+    size_t width = img_w;
+    size_t height = img_h;
+    
+    if(GLSupport::supportsNPOT() == false)
+    {
+        width = nextPOTValue(img_w);
+        height = nextPOTValue(img_h);
+    }
+    
+    
+    glEnable(GL_TEXTURE_2D);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    
+    //hasPremultipliedAlpha
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    void *imageData = malloc(height * width * 4);
+    CGContextRef context = CGBitmapContextCreate( imageData, width, height, 8, 4 * width, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
+    
+    
+    
+    //#if TARGET_IOS
+    CGContextTranslateCTM (context, 0, height);
+    CGContextScaleCTM (context, 1.0, -1.0);
+    //#endif
+    
+    // draw string
+    CGContextClearRect(context, CGRectMake(0, 0, width, height));
+    
+#if TARGET_MAC
+    NSGraphicsContext * nsctx = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:NO];
+    [NSGraphicsContext saveGraphicsState];
+    [NSGraphicsContext setCurrentContext:nsctx];
+    [textContent drawInRect: textRect withAttributes: textFontAttributes];
+    [NSGraphicsContext restoreGraphicsState];
+#elif TARGET_IOS
+    UIGraphicsPushContext(context);
+    [textContent drawInRect:textRect withAttributes:textFontAttributes];
+    UIGraphicsPopContext();
+#else
+#error "Can not enter here."
+#endif
+    
+    CGContextRelease(context);
+    CGColorSpaceRelease( colorSpace );
+    
+    
+    TextureInfo tinfo;
+    tinfo.width = (unsigned int)width;
+    tinfo.height = (unsigned int)height;
+    tinfo._MaxT = (unsigned int)img_w;
+    tinfo._MaxS = (unsigned int)img_h;
+    
+    
+    glGenTextures(1, &(tinfo.glName));
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture(GL_TEXTURE_2D, tinfo.glName );
+    
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (int)width, (int)height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+    
+    free(imageData);
+    
+    return tinfo;
+}
+
+
 ////////////////////////////////////////////////////////////////////////
 
 long loadBundleFileContextWithNameAPPLE(std::string & name, char ** buff)
 {
     return loadBundleFileContextWithNameAPPLE(name.c_str(), buff);
 }
+
 
 long loadBundleFileContextWithNameAPPLE(const char * name, char ** buff)
 {

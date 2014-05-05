@@ -261,8 +261,6 @@
 		9D674800186184BF0064A66E /* libpng15.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng15.a; path = ../../../../../../usr/local/lib/libpng15.a; sourceTree = "<group>"; };
 		9D6CDA85184D824400279F1A /* GLBlender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLBlender.h; sourceTree = "<group>"; };
 		9D6CDA87184DC36B00279F1A /* Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
-		9D6CDA8F184DE24200279F1A /* iOSPvrTextureLoader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = iOSPvrTextureLoader.mm; sourceTree = "<group>"; };
-		9D6CDA91184DE27600279F1A /* iOSPvrTextureLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iOSPvrTextureLoader.h; sourceTree = "<group>"; };
 		9D7270E71872894200F9829E /* ResourcePacker */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ResourcePacker; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D7270EA1872894200F9829E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9D7270ED1872894200F9829E /* ResourcePacker-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ResourcePacker-Prefix.pch"; sourceTree = "<group>"; };
@@ -271,8 +269,6 @@
 		9D7294131857F98F009D08F7 /* GLParticleSystems.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLParticleSystems.h; sourceTree = "<group>"; };
 		9D74CD4B18598684004134E2 /* base64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = base64.c; sourceTree = "<group>"; };
 		9D74CD4C18598684004134E2 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
-		9D74CD51185997E2004134E2 /* color.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = color.fsh; sourceTree = "<group>"; };
-		9D74CD52185997E2004134E2 /* color.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = color.vsh; sourceTree = "<group>"; };
 		9D74CD53185997E2004134E2 /* ParticleSystem.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = ParticleSystem.fsh; sourceTree = "<group>"; };
 		9D74CD54185997E2004134E2 /* ParticleSystem.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = ParticleSystem.vsh; sourceTree = "<group>"; };
 		9D75A4EB184EF4B300998DEC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -594,8 +590,6 @@
 		9D74CD50185997E2004134E2 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
-				9D74CD51185997E2004134E2 /* color.fsh */,
-				9D74CD52185997E2004134E2 /* color.vsh */,
 				9D7F50B41914A7E400C4768D /* ColorDraw.fsh */,
 				9D7F50B51914A7E400C4768D /* ColorDraw.vsh */,
 				9D7F50B61914A7E400C4768D /* TextColorMix.fsh */,
@@ -736,8 +730,6 @@
 				9D6CDA87184DC36B00279F1A /* Utilities.h */,
 				9DD8B4671848357400E2A7C0 /* Utilities.cpp */,
 				9DD8B4661848335D00E2A7C0 /* GLRenderDef.h */,
-				9D6CDA8F184DE24200279F1A /* iOSPvrTextureLoader.mm */,
-				9D6CDA91184DE27600279F1A /* iOSPvrTextureLoader.h */,
 				9D05165718713E3F00B246FA /* DefaultShader.h */,
 			);
 			path = Classes;

@@ -50,10 +50,6 @@ typedef enum {
 unsigned long nextPOTValue(unsigned long x);
 
 
-/** @def CCRANDOM_0_1
- returns a random float between 0 and 1
- #define CCRANDOM_0_1() ((random() / (float)0x7fffffff ))
- */
 // [0-1]
 static inline float randomFloat()
 {
@@ -72,13 +68,13 @@ static inline double cppString2Float(std::string & str)
     return temp;
 }
 
-std::string string_format(const char *fmt, ...);
+std::string * string_format(const char *fmt, ...);
 
 bool hasPrefix(std::string & str, const std::string & prefix);
 
 bool hasSuffix(std::string & str, const std::string & suffix);
 
-std::string lastPathComponent(std::string & path);
+std::string  lastPathComponent(std::string & path);
 
 
 class RenderException

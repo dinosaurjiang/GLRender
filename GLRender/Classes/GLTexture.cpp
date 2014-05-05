@@ -161,21 +161,6 @@ GLTexture * GLTextureManager::createTextureWithPNGDataAndName(const void * bytes
 }
 
 
-GLTexture * GLTextureManager::createTextureWithPVRDataAndName(const void * bytes,
-                                                              unsigned long length,
-                                                              string & name)
-{
-    TextureInfo info =  createGLTextureWithPVRDataAPPLE(bytes,length);
-    GLTexture * texture = new GLTexture(info);
-    if (!texture)
-    {
-        return nullptr;
-    }
-    string last = lastPathComponent(name);
-    _textureList[last] = texture;
-    return texture;
-}
-
 GLTexture * GLTextureManager::getTextureWithName(string & name)
 {
     map<string, GLTexture *>::iterator it = _textureList.find(name);
@@ -283,8 +268,10 @@ void GLTextureManager::clearAllCache()
 #pragma mark -
 #pragma mark GLTextureFrameSheet
 
+
 #include "reader.h"
 #include "Utilities.h"
+
 
 GLTextureFrameSheet::~GLTextureFrameSheet()
 {
