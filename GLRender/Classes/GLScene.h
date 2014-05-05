@@ -40,8 +40,10 @@ using namespace std;
 *
 * also with lua build
 */
+
+// 未完成：和lua的绑定。
+
 class GLTextureFrameSheet;
-class LuaParam;
 #define LP(v) (new Value(v))
 
 class GLScene : public GLColorLayer

@@ -925,16 +925,16 @@ void GLParticleSystemQuad::createVAO()
     glBufferData(GL_ARRAY_BUFFER, sizeof(Quad) * _totalParticles, _particleList, GL_DYNAMIC_DRAW);
     
     // vertices
-    glEnableVertexAttribArray(ATTRIB_VERTEX);
-    glVertexAttribPointer(ATTRIB_VERTEX, 2, GL_FLOAT, GL_FALSE, kQuadSize, (GLvoid*) offsetof( PerPointInfo, vertices));
+    glEnableVertexAttribArray(GLProgram::ATTRIB_VERTEX);
+    glVertexAttribPointer(GLProgram::ATTRIB_VERTEX, 2, GL_FLOAT, GL_FALSE, kQuadSize, (GLvoid*) offsetof( PerPointInfo, vertices));
     
     // colors
-    glEnableVertexAttribArray(ATTRIB_COLOR);
-    glVertexAttribPointer(ATTRIB_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (GLvoid*) offsetof( PerPointInfo, color));
+    glEnableVertexAttribArray(GLProgram::ATTRIB_COLOR);
+    glVertexAttribPointer(GLProgram::ATTRIB_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (GLvoid*) offsetof( PerPointInfo, color));
     
     // tex coords
-    glEnableVertexAttribArray(ATTRIB_TEXCOORD);
-    glVertexAttribPointer(ATTRIB_TEXCOORD, 2, GL_FLOAT, GL_FALSE, kQuadSize, (GLvoid*) offsetof( PerPointInfo, texCoords));
+    glEnableVertexAttribArray(GLProgram::ATTRIB_TEXCOORD);
+    glVertexAttribPointer(GLProgram::ATTRIB_TEXCOORD, 2, GL_FLOAT, GL_FALSE, kQuadSize, (GLvoid*) offsetof( PerPointInfo, texCoords));
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffersVBO[1]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(_particleIdxCache[0]) * _totalParticles * 6, _particleIdxCache, GL_STATIC_DRAW);
@@ -973,14 +973,14 @@ void GLParticleSystemQuad::visit()
 	char * startAddr = (char *)_particleList;
     
     
-    glEnableVertexAttribArray( ATTRIB_VERTEX );
-    glVertexAttribPointer(ATTRIB_VERTEX, 2,GL_FLOAT, GL_FALSE,strike, (void*)startAddr);
+    glEnableVertexAttribArray( GLProgram::ATTRIB_VERTEX );
+    glVertexAttribPointer(GLProgram::ATTRIB_VERTEX, 2,GL_FLOAT, GL_FALSE,strike, (void*)startAddr);
     
-    glEnableVertexAttribArray( ATTRIB_TEXCOORD );
-    glVertexAttribPointer(ATTRIB_TEXCOORD, 2,GL_FLOAT, GL_FALSE,strike, (void*)(startAddr + sizeof(float) * 2));
+    glEnableVertexAttribArray( GLProgram::ATTRIB_TEXCOORD );
+    glVertexAttribPointer(GLProgram::ATTRIB_TEXCOORD, 2,GL_FLOAT, GL_FALSE,strike, (void*)(startAddr + sizeof(float) * 2));
     
-    glEnableVertexAttribArray( ATTRIB_COLOR );
-    glVertexAttribPointer(ATTRIB_COLOR, 4,GL_UNSIGNED_BYTE, GL_TRUE, strike, (void*)(startAddr + sizeof(float) * 4));
+    glEnableVertexAttribArray( GLProgram::ATTRIB_COLOR );
+    glVertexAttribPointer(GLProgram::ATTRIB_COLOR, 4,GL_UNSIGNED_BYTE, GL_TRUE, strike, (void*)(startAddr + sizeof(float) * 4));
     glDrawElements(GL_TRIANGLES, (GLsizei) _particleIdx*6, GL_UNSIGNED_SHORT, _particleIdxCache);
     
 #endif

@@ -17,10 +17,10 @@ public:
     
     DECLARE_CLASS(GLBlender)
     
-	//! source blend function
+	// source blend function
 	unsigned int src = GL_ONE;
     
-	//! destination blend function
+	// destination blend function
 	unsigned int dst = GL_ONE_MINUS_SRC_ALPHA;
     
     GLBlender() = default;

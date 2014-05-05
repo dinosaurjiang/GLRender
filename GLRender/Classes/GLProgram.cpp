@@ -34,12 +34,22 @@ GLProgram::~GLProgram()
 
 bool GLProgram::loadShadersByName(const char * vsh, const char * fsh)
 {
+    return this->loadShadersByName(vsh, fsh, (color_flag|texcoord_flag));
+}
+
+bool GLProgram::loadShadersByName(const char * vsh, const char * fsh, int flag)
+{
     string tvsh(vsh);
     string tfsh(fsh);
-    return this->loadShadersByName(tvsh, tfsh);
+    return this->loadShadersByName(tvsh, tfsh, flag);
 }
 
 bool GLProgram::loadShadersByName(string & vsh, string & fsh)
+{
+    return this->loadShadersByName(vsh, fsh, (color_flag|texcoord_flag));
+}
+
+bool GLProgram::loadShadersByName(string & vsh, string & fsh, int flag)
 {
     char * vertexBuff = NULL;
     char * fragmentBuff = NULL;
@@ -55,7 +65,7 @@ bool GLProgram::loadShadersByName(string & vsh, string & fsh)
     if(flen == 0)
         goto FAILED;
     
-    ret = this->loadShaders(vertexBuff, fragmentBuff);
+    ret = this->loadShaders(vertexBuff, fragmentBuff, flag);
     
 
 FAILED:
@@ -69,6 +79,12 @@ FAILED:
 }
 
 bool GLProgram::loadShaders(const char * vsh, const char * fsh)
+{
+    return this->loadShaders(vsh,fsh,(color_flag|texcoord_flag));
+}
+
+
+bool GLProgram::loadShaders(const char * vsh, const char * fsh, int flag)
 {
     GLuint vertShader = 0, fragShader = 0;
     
@@ -99,9 +115,14 @@ bool GLProgram::loadShaders(const char * vsh, const char * fsh)
     
     // Bind attribute locations.
     // This needs to be done prior to linking.
-    glBindAttribLocation(_program, ATTRIB_VERTEX,   "a_position");
-    glBindAttribLocation(_program, ATTRIB_COLOR,    "a_color");
-    glBindAttribLocation(_program, ATTRIB_TEXCOORD, "a_texCoord");
+    // position must be load
+    glBindAttribLocation(_program, GLProgram::ATTRIB_VERTEX,   "a_position");
+    
+    if(flag & color_flag)
+        glBindAttribLocation(_program, GLProgram::ATTRIB_COLOR,    "a_color");
+    
+    if(flag & texcoord_flag)
+        glBindAttribLocation(_program, GLProgram::ATTRIB_TEXCOORD, "a_texCoord");
     
     // Link program.
     if (!(this->linkProgram(_program)))

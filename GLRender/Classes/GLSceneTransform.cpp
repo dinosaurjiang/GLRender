@@ -71,16 +71,16 @@ void GLSceneTransform::drawFromTexture()
     int strike = sizeof(PerPointInfo);
 	char * startAddr = (char *)_fromQuadList;
     
-    glEnableVertexAttribArray( ATTRIB_VERTEX );
-    glVertexAttribPointer(ATTRIB_VERTEX, 3,
+    glEnableVertexAttribArray( GLProgram::ATTRIB_VERTEX );
+    glVertexAttribPointer(GLProgram::ATTRIB_VERTEX, 3,
                           GL_FLOAT, GL_FALSE,
                           strike, (void*)startAddr);
     
     
-    glVertexAttribPointer(ATTRIB_TEXCOORD, 2,
+    glVertexAttribPointer(GLProgram::ATTRIB_TEXCOORD, 2,
                           GL_FLOAT, GL_FALSE,
                           strike, (void*)(startAddr + sizeof(float) * 3));
-    glEnableVertexAttribArray( ATTRIB_TEXCOORD );
+    glEnableVertexAttribArray( GLProgram::ATTRIB_TEXCOORD );
 #ifdef DEBUG
     if(_fromTexture==nullptr)
         LOG("glsprite has no texture.<%p>",this);
@@ -88,7 +88,7 @@ void GLSceneTransform::drawFromTexture()
     
     // disable color
     // sprite do not draw backgound
-    glDisableVertexAttribArray(ATTRIB_COLOR);
+    glDisableVertexAttribArray(GLProgram::ATTRIB_COLOR);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
@@ -108,16 +108,16 @@ void GLSceneTransform::drawToTexture()
     int strike = sizeof(PerPointInfo);
 	char * startAddr = (char *)_toQuadList;
     
-    glEnableVertexAttribArray( ATTRIB_VERTEX );
-    glVertexAttribPointer(ATTRIB_VERTEX, 3,
+    glEnableVertexAttribArray( GLProgram::ATTRIB_VERTEX );
+    glVertexAttribPointer(GLProgram::ATTRIB_VERTEX, 3,
                           GL_FLOAT, GL_FALSE,
                           strike, (void*)startAddr);
     
     
-    glVertexAttribPointer(ATTRIB_TEXCOORD, 2,
+    glVertexAttribPointer(GLProgram::ATTRIB_TEXCOORD, 2,
                           GL_FLOAT, GL_FALSE,
                           strike, (void*)(startAddr + sizeof(float) * 3));
-    glEnableVertexAttribArray( ATTRIB_TEXCOORD );
+    glEnableVertexAttribArray( GLProgram::ATTRIB_TEXCOORD );
 #ifdef DEBUG
     if(_toTexture==nullptr)
         LOG("glsprite has no texture.<%p>",this);
@@ -125,7 +125,7 @@ void GLSceneTransform::drawToTexture()
     
     // disable color
     // sprite do not draw backgound
-    glDisableVertexAttribArray(ATTRIB_COLOR);
+    glDisableVertexAttribArray(GLProgram::ATTRIB_COLOR);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 

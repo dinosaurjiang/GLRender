@@ -84,7 +84,7 @@ double Value::asDouble()
     switch (_type) {
         case Bool: return this->_values.boolValue ? 1.0 : 0.0; break;
         case Int: return this->_values.intValue * 1.0; break;
-        case Double:this->_values.doubleValue; break;
+        case Double:return this->_values.doubleValue; break;
         case NULLValue:
         case String:
         default:

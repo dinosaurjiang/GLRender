@@ -102,22 +102,22 @@ void GLMutableLineLabel::visit()
         LOG("sprite has no texture.<%p>",this);
 #endif
     
-    glEnableVertexAttribArray( ATTRIB_VERTEX );
-    glVertexAttribPointer(ATTRIB_VERTEX, 2,
+    glEnableVertexAttribArray(GLProgram::GLProgram::ATTRIB_VERTEX );
+    glVertexAttribPointer(GLProgram::ATTRIB_VERTEX, 2,
                           GL_FLOAT, GL_FALSE,
                           strike, (void*)startAddr);
     
-    glVertexAttribPointer(ATTRIB_TEXCOORD, 2,
+    glVertexAttribPointer(GLProgram::ATTRIB_TEXCOORD, 2,
                           GL_FLOAT, GL_FALSE,
                           strike, (void*)(startAddr + sizeof(float) * 2));
-    glEnableVertexAttribArray( ATTRIB_TEXCOORD );
+    glEnableVertexAttribArray( GLProgram::ATTRIB_TEXCOORD );
     
     
     // use color for text color
-    glVertexAttribPointer(ATTRIB_COLOR, 4,
+    glVertexAttribPointer(GLProgram::ATTRIB_COLOR, 4,
                           GL_UNSIGNED_BYTE, GL_TRUE,
                           strike, (void*)(startAddr + sizeof(float) * 4));
-    glEnableVertexAttribArray( ATTRIB_COLOR );
+    glEnableVertexAttribArray( GLProgram::ATTRIB_COLOR );
     
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }

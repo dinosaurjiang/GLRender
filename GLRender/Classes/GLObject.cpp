@@ -267,16 +267,16 @@ void GLSprite::visit()
     int strike = sizeof(PerPointInfo);
 	char * startAddr = (char *)&_quadInfo;
     
-    glEnableVertexAttribArray( ATTRIB_VERTEX );
-    glVertexAttribPointer(ATTRIB_VERTEX, 2,
+    glEnableVertexAttribArray( GLProgram::ATTRIB_VERTEX );
+    glVertexAttribPointer(GLProgram::ATTRIB_VERTEX, 2,
                           GL_FLOAT, GL_FALSE,
                           strike, (void*)startAddr);
     
     
-    glVertexAttribPointer(ATTRIB_TEXCOORD, 2,
+    glVertexAttribPointer(GLProgram::ATTRIB_TEXCOORD, 2,
                           GL_FLOAT, GL_FALSE,
                           strike, (void*)(startAddr + sizeof(float) * 2));
-    glEnableVertexAttribArray( ATTRIB_TEXCOORD );
+    glEnableVertexAttribArray( GLProgram::ATTRIB_TEXCOORD );
     
 #ifdef DEBUG
         if(_texture==nullptr)
@@ -285,7 +285,7 @@ void GLSprite::visit()
     
     // disable color
     // sprite do not draw backgound
-    glDisableVertexAttribArray(ATTRIB_COLOR);
+    glDisableVertexAttribArray(GLProgram::ATTRIB_COLOR);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
@@ -340,15 +340,15 @@ void GLColorLayer::visit()
     int strike = sizeof(PerPointInfo);
 	char * startAddr = (char *)&_quadInfo;
     
-    glVertexAttribPointer(ATTRIB_VERTEX, 2,
+    glVertexAttribPointer(GLProgram::ATTRIB_VERTEX, 2,
                           GL_FLOAT, GL_FALSE,
                           strike, (void*)startAddr);
-    glEnableVertexAttribArray( ATTRIB_VERTEX );
+    glEnableVertexAttribArray( GLProgram::ATTRIB_VERTEX );
     
-    glVertexAttribPointer(ATTRIB_COLOR, 4,
+    glVertexAttribPointer(GLProgram::ATTRIB_COLOR, 4,
                           GL_UNSIGNED_BYTE, GL_TRUE,
                           strike, (void*)(startAddr + sizeof(float) * 4));
-    glEnableVertexAttribArray( ATTRIB_COLOR );
+    glEnableVertexAttribArray( GLProgram::ATTRIB_COLOR );
     
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
