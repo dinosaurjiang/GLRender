@@ -212,6 +212,7 @@ public:
     GLTransformAppearFromLeft(GLScene * from, GLScene * to):GLTransformAppear(from,to,Ori_Left){};
 };
 
+
 ////////////////////////////////////////////////////////////////////////////////////
 class GLTransformAppearFromRight : public GLTransformAppear
 {
@@ -231,6 +232,7 @@ public:
     GLTransformAppearFromTop(GLScene * from, GLScene * to):GLTransformAppear(from,to,Ori_Up){};
 };
 
+
 ////////////////////////////////////////////////////////////////////////////////////
 class GLTransformAppearFromBottom : public GLTransformAppear
 {
@@ -239,6 +241,7 @@ public:
     ~GLTransformAppearFromBottom() = default;
     GLTransformAppearFromBottom(GLScene * from, GLScene * to):GLTransformAppear(from,to,Ori_Down){};
 };
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////

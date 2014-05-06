@@ -23,27 +23,27 @@ GLMutableLineLabel::~GLMutableLineLabel()
 bool GLMutableLineLabel::init(string & text,string & fontName,float fontSize, Color4B color,GLHTextAlignment halign,GLVTextAlignment valign,GLLineBreakMode breakMode,float width, float height)
 {
     return this->init(text.c_str(),
-                                           fontName.c_str(),
-                                           fontSize,
-                                           color,
-                                           halign,
-                                           valign,
-                                           breakMode,
-                                           width,
-                                           height);
+                      fontName.c_str(),
+                      fontSize,
+                      color,
+                      halign,
+                      valign,
+                      breakMode,
+                      width,
+                      height);
 }
 
 
 
 bool GLMutableLineLabel::init(const char * text,
-                                       const char * fontName,
-                                       float fontSize,
-                                       Color4B color,
-                                       GLHTextAlignment halign,
-                                       GLVTextAlignment valign,
-                                       GLLineBreakMode breakMode,
-                                       float width,
-                                       float height)
+                              const char * fontName,
+                              float fontSize,
+                              Color4B color,
+                              GLHTextAlignment halign,
+                              GLVTextAlignment valign,
+                              GLLineBreakMode breakMode,
+                              float width,
+                              float height)
 {
     
     TextureInfo textTexture = createGLTextureWithString(text,
@@ -66,8 +66,6 @@ bool GLMutableLineLabel::init(const char * text,
     
     this->setTexture(new GLTexture(textTexture));
     
-    this->initPosition();
-    
     _quadInfo.lu.color = color;
     _quadInfo.ru.color = color;
     
@@ -77,6 +75,7 @@ bool GLMutableLineLabel::init(const char * text,
     _textSize = fontSize;
     _color = color;
     
+    this->initPosition();
     return true;
 }
 
@@ -87,14 +86,19 @@ bool GLMutableLineLabel::init(string & text,string & fontName,float fontSize, Co
 
 
 bool GLMutableLineLabel::init( const char * text,
-                                       const char * fontName,
-                                       float fontSize,
-                                       Color4B color,
-                                       float width,
-                                       float height)
+                              const char * fontName,
+                              float fontSize,
+                              Color4B color,
+                              float width,
+                              float height)
 {
-    return this->init(text,fontName,fontSize,color,
-                     kGLHTextAlignmentCenter,kGLVTextAlignmentTop,kGLLineBreakModeClip,width,height);
+    return this->init(
+                      text,fontName,fontSize,color,
+                      kGLHTextAlignmentCenter,
+                      kGLVTextAlignmentTop,
+                      kGLLineBreakModeClip,
+                      width,height
+                      );
 }
 
 
@@ -131,7 +135,7 @@ void GLMutableLineLabel::visit()
     
     
     _blend.blend();
-
+    
     if(_texture)
         _texture->bind();
     

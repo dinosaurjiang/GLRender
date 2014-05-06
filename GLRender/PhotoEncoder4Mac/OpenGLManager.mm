@@ -72,6 +72,7 @@ static GLLabel * myObject;
 -(void) openGLViewDidReady:(OpenGLView *)glview
 {
     self.openGLView = glview;
+    
     if (_refresh_timer == nil)
     {
         _refresh_timer = [NSTimer scheduledTimerWithTimeInterval:FrameInterval

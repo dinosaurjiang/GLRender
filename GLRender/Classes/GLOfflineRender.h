@@ -29,7 +29,7 @@
  
  beginRender() 
  ...
- your gl draw commands.
+ your openGL draw commands.
  ...
  endRender()
  

@@ -96,6 +96,8 @@ public:
     GLObject2D(Color4B start, Color4B end);
     virtual ~GLObject2D();
     
+    //
+    virtual bool init();
     
     // public vars
     void rotateZ(float angle);

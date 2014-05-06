@@ -20,6 +20,12 @@ GLObject2D::~GLObject2D()
     
 }
 
+bool GLObject2D::init()
+{
+    this->initPosition();
+    this->initTexCoord();
+    return true;
+}
 
 GLObject2D::GLObject2D(const kmVec2 size,const kmVec2 pos)
 {
@@ -27,8 +33,11 @@ GLObject2D::GLObject2D(const kmVec2 size,const kmVec2 pos)
     _boundingBox.y = size.y;
     _boundingBox.z = .0;
     
-    _texture = nullptr;
-    this->initTexCoord();
+    
+    _position.x = pos.x;
+    _position.y = pos.y;
+    _position.z = .0;
+    
 }
 
 GLObject2D::GLObject2D(float posX, float posY,float w, float h)
@@ -36,8 +45,10 @@ GLObject2D::GLObject2D(float posX, float posY,float w, float h)
     _boundingBox.x = w;
     _boundingBox.y = h;
     _boundingBox.z = .0;
-    _texture = nullptr;
-    this->initTexCoord();
+    
+    _position.x = posX;
+    _position.y = posY;
+    _position.z = .0;
 }
 
 
@@ -58,8 +69,6 @@ GLObject2D::GLObject2D(Color4B start, Color4B end)
     _boundingBox.y = GLSupport::frameBufferHeight();
     _boundingBox.z = .0;
     
-    _texture = nullptr;
-    this->initTexCoord();
 }
 
 void GLObject2D::transform()

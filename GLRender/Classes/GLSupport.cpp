@@ -26,6 +26,7 @@ std::vector<GLSupport::GLMatrixItem *> GLSupport::_matrixStack;
 int GLSupport::_GLViewSizeWidth;
 int GLSupport::_GLViewSizeHeight;
 
+
 void GLSupport::openGLViewSize(float * w, float * h)
 {
     *w = GLSupport::_GLViewSizeWidth;
@@ -62,6 +63,8 @@ void GLSupport::popMatrix()
     // remove the last one.
     GLMatrixItem * mat4 = GLSupport::_matrixStack.back();
     delete mat4;
+    
+    
     GLSupport::_matrixStack.pop_back();
     
     // update the current

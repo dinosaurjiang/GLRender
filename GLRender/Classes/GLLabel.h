@@ -17,8 +17,8 @@
  关于文字的颜色的原理是这样的。
  纹理是白色的，文字颜色给定，在GPU里面 通过color * texColor 来显示。
  这样做的好处:
-    动态改变文字color效率很好的。
-    因为文字纹理图片不需要重新绘制。
+ 动态改变文字color效率很好的。
+ 因为文字纹理图片不需要重新绘制。
  
  当然，这个要根据后续的测试来搞看性能怎么样。
  
@@ -45,44 +45,45 @@ public:
     
     GLMutableLineLabel():GLSprite(){};
     ~GLMutableLineLabel();
+    
     bool init(string & text,
-                       string & fontName,
-                       float fontSize,
-                       Color4B color,
-                       GLHTextAlignment halign,
-                       GLVTextAlignment valign,
-                       GLLineBreakMode breakMode,
-                       float width,
-                       float height);
+              string & fontName,
+              float fontSize,
+              Color4B color,
+              GLHTextAlignment halign,
+              GLVTextAlignment valign,
+              GLLineBreakMode breakMode,
+              float width,
+              float height);
     
     
     bool init(string & text,
-                       string & fontName,
-                       float fontSize,
-                       Color4B color,
-                       float width,
-                       float height);
+              string & fontName,
+              float fontSize,
+              Color4B color,
+              float width,
+              float height);
     
     
     
     
     bool init(const char * text,
-                       const char * fontName,
-                       float fontSize,
-                       Color4B color,
-                       GLHTextAlignment halign,
-                       GLVTextAlignment valign,
-                       GLLineBreakMode breakMode,
-                       float width,
-                       float height);
+              const char * fontName,
+              float fontSize,
+              Color4B color,
+              GLHTextAlignment halign,
+              GLVTextAlignment valign,
+              GLLineBreakMode breakMode,
+              float width,
+              float height);
     
     
     bool init(const char * text,
-                       const char * fontName,
-                       float fontSize,
-                       Color4B color,
-                       float width,
-                       float height);
+              const char * fontName,
+              float fontSize,
+              Color4B color,
+              float width,
+              float height);
     
     virtual void visit();
     virtual void usePorgram();
