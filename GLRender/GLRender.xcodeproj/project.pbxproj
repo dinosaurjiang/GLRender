@@ -117,6 +117,7 @@
 		9D7FA12F1914F6EC00061A51 /* TextureDraw.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 9D7F50B91914A7E400C4768D /* TextureDraw.vsh */; };
 		9D7FA13419167F5E00061A51 /* GLValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D7FA13219167F5E00061A51 /* GLValue.cpp */; };
 		9D8EF12918768D0700704CDC /* GLBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D8EF12718768D0700704CDC /* GLBase.cpp */; };
+		9D91F1001918A862006B9FF7 /* CocoaTextRenderSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9D91F0FF1918A862006B9FF7 /* CocoaTextRenderSupport.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -311,6 +312,8 @@
 		9D8E4BDC1855ADA300E46CE5 /* json_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = json_writer.cpp; sourceTree = "<group>"; };
 		9D8EF12718768D0700704CDC /* GLBase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLBase.cpp; sourceTree = "<group>"; };
 		9D8EF12818768D0700704CDC /* GLBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLBase.h; sourceTree = "<group>"; };
+		9D91F0FE1918A862006B9FF7 /* CocoaTextRenderSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaTextRenderSupport.h; sourceTree = "<group>"; };
+		9D91F0FF1918A862006B9FF7 /* CocoaTextRenderSupport.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CocoaTextRenderSupport.mm; sourceTree = "<group>"; };
 		9DA8EBC11847298600D91848 /* GLObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLObject.cpp; sourceTree = "<group>"; };
 		9DA8EBC21847298600D91848 /* GLObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLObject.h; sourceTree = "<group>"; };
 		9DA8EBC518472B9200D91848 /* GLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture.cpp; sourceTree = "<group>"; };
@@ -725,6 +728,8 @@
 				9D7C79081862E6F300BD5694 /* GLOfflineRender.h */,
 				9DD8B45718482AB800E2A7C0 /* GLRenderPlatformHelper.mm */,
 				9DD8B45818482AB800E2A7C0 /* GLRenderPlatformHelper.h */,
+				9D91F0FE1918A862006B9FF7 /* CocoaTextRenderSupport.h */,
+				9D91F0FF1918A862006B9FF7 /* CocoaTextRenderSupport.mm */,
 				9D8E4BC71855A54F00E46CE5 /* GLSupport.cpp */,
 				9D8E4BC81855A54F00E46CE5 /* GLSupport.h */,
 				9D6CDA87184DC36B00279F1A /* Utilities.h */,
@@ -899,6 +904,7 @@
 				9D7FA13419167F5E00061A51 /* GLValue.cpp in Sources */,
 				9D05162318710FBE00B246FA /* vec3.c in Sources */,
 				9D05162418710FBE00B246FA /* vec4.c in Sources */,
+				9D91F1001918A862006B9FF7 /* CocoaTextRenderSupport.mm in Sources */,
 				9D7F50BD1914A7E400C4768D /* TextColorMix.vsh in Sources */,
 				9D05169D18714F8500B246FA /* ldebug.c in Sources */,
 				9D0516AB18714F8500B246FA /* lparser.c in Sources */,

@@ -112,17 +112,7 @@ bool GLProgram::loadShaders(const char * vsh, const char * fsh, int flag)
     // Attach fragment shader to program.
     glAttachShader(_program, fragShader);
     
-    
-    // Bind attribute locations.
-    // This needs to be done prior to linking.
-    // position must be load
-    glBindAttribLocation(_program, GLProgram::ATTRIB_VERTEX,   "a_position");
-    
-    if(flag & color_flag)
-        glBindAttribLocation(_program, GLProgram::ATTRIB_COLOR,    "a_color");
-    
-    if(flag & texcoord_flag)
-        glBindAttribLocation(_program, GLProgram::ATTRIB_TEXCOORD, "a_texCoord");
+    this->bindShaderAttributes(flag);
     
     // Link program.
     if (!(this->linkProgram(_program)))
@@ -160,6 +150,21 @@ bool GLProgram::loadShaders(const char * vsh, const char * fsh, int flag)
 //    glUniform1f(this->attributeForName(TEXTURE1), 0);
     
     return true;
+}
+
+void GLProgram::bindShaderAttributes(int flag)
+{
+    
+    // Bind attribute locations.
+    // This needs to be done prior to linking.
+    // position must be load
+    glBindAttribLocation(_program, GLProgram::ATTRIB_VERTEX,   "a_position");
+    
+    if(flag & color_flag)
+        glBindAttribLocation(_program, GLProgram::ATTRIB_COLOR,    "a_color");
+    
+    if(flag & texcoord_flag)
+        glBindAttribLocation(_program, GLProgram::ATTRIB_TEXCOORD, "a_texCoord");
 }
 
 bool GLProgram::compileShader(GLuint * shader, GLenum type ,const GLchar * source)

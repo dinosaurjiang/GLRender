@@ -10,6 +10,7 @@
 #include "GLProgram.h"
 #include "GLTexture.h"
 #include "GLSupport.h"
+#include "CocoaTextRenderSupport.h"
 
 using namespace std;
 
@@ -19,11 +20,35 @@ GLMutableLineLabel::~GLMutableLineLabel()
 }
 
 
-GLMutableLineLabel::GLMutableLineLabel(string & text,float fontSize,string & fontName, Color4B color,GLHTextAlignment halign,GLVTextAlignment valign,GLLineBreakMode breakMode,float width, float height)
+bool GLMutableLineLabel::init(string & text,string & fontName,float fontSize, Color4B color,GLHTextAlignment halign,GLVTextAlignment valign,GLLineBreakMode breakMode,float width, float height)
 {
+    return this->init(text.c_str(),
+                                           fontName.c_str(),
+                                           fontSize,
+                                           color,
+                                           halign,
+                                           valign,
+                                           breakMode,
+                                           width,
+                                           height);
+}
+
+
+
+bool GLMutableLineLabel::init(const char * text,
+                                       const char * fontName,
+                                       float fontSize,
+                                       Color4B color,
+                                       GLHTextAlignment halign,
+                                       GLVTextAlignment valign,
+                                       GLLineBreakMode breakMode,
+                                       float width,
+                                       float height)
+{
+    
     TextureInfo textTexture = createGLTextureWithString(text,
-                                                        fontSize,
                                                         fontName,
+                                                        fontSize,
                                                         halign,
                                                         valign,
                                                         breakMode,
@@ -33,28 +58,42 @@ GLMutableLineLabel::GLMutableLineLabel(string & text,float fontSize,string & fon
     // here we do not cache gltexture
     // just keep it,
     // and when label delete, also delete texture.
-    _texture = new GLTexture(textTexture);
     
     _boundingBox.x = textTexture.width;
     _boundingBox.y = textTexture.height;
     _boundingBox.z = 0;
     _position = {0};
     
+    this->setTexture(new GLTexture(textTexture));
     
     this->initPosition();
-    this->initTexCoord();
-    
     
     _quadInfo.lu.color = color;
     _quadInfo.ru.color = color;
     
     _quadInfo.ld.color = color;
     _quadInfo.rd.color = color;
+    
+    _textSize = fontSize;
+    _color = color;
+    
+    return true;
 }
 
-GLMutableLineLabel::GLMutableLineLabel(string & text,float fontSize,string & fontName, Color4B color,float width, float height)
+bool GLMutableLineLabel::init(string & text,string & fontName,float fontSize, Color4B color,float width, float height)
 {
-    GLMutableLineLabel::GLMutableLineLabel(text,fontSize,fontName,color,
+    return this->init(text.c_str(),fontName.c_str(),fontSize,color,width,height);
+}
+
+
+bool GLMutableLineLabel::init( const char * text,
+                                       const char * fontName,
+                                       float fontSize,
+                                       Color4B color,
+                                       float width,
+                                       float height)
+{
+    return this->init(text,fontName,fontSize,color,
                      kGLHTextAlignmentCenter,kGLVTextAlignmentTop,kGLLineBreakModeClip,width,height);
 }
 
@@ -92,14 +131,18 @@ void GLMutableLineLabel::visit()
     
     
     _blend.blend();
-    if(_texture)_texture->bind();
+
+    if(_texture)
+        _texture->bind();
     
     int strike = sizeof(PerPointInfo);
 	char * startAddr = (char *)&_quadInfo;
     
 #ifdef DEBUG
     if(_texture==nullptr)
-        LOG("sprite has no texture.<%p>",this);
+    {
+        LOG("label has no texture.<%p:%s>",this,this->className());
+    }
 #endif
     
     glEnableVertexAttribArray(GLProgram::GLProgram::ATTRIB_VERTEX );
@@ -130,16 +173,27 @@ void GLMutableLineLabel::visit()
 
 GLLabel::~GLLabel()
 {
-//    GLMutableLineLabel::~GLMutableLineLabel();
-}
-
-GLLabel::GLLabel(string & text,float fontSize,string & fontName, Color4B color,GLHTextAlignment halign,GLVTextAlignment valign,GLLineBreakMode breakMode):GLMutableLineLabel(text,fontSize,fontName,color,halign,valign,breakMode,.0,.0)
-{
     
 }
 
-GLLabel::GLLabel(string & text,float fontSize,string & fontName, Color4B color):GLMutableLineLabel(text,fontSize,fontName,color,.0,.0)
+bool GLLabel::init(string & text,string & fontName,float fontSize, Color4B color,GLHTextAlignment halign,GLVTextAlignment valign,GLLineBreakMode breakMode)
 {
+    return GLMutableLineLabel::init(text,fontName,fontSize,color,halign,valign,breakMode,.0,.0);
+}
+
+bool GLLabel::init(string & text,string & fontName,float fontSize, Color4B color){
     
+    return GLMutableLineLabel::init(text,fontName,fontSize,color,.0,.0);
+}
+
+
+bool GLLabel::init(const char *text,const char *fontName,float fontSize, Color4B color,GLHTextAlignment halign,GLVTextAlignment valign,GLLineBreakMode breakMode)
+{
+    return GLMutableLineLabel::init(text,fontName,fontSize,color,halign,valign,breakMode,.0,.0);
+}
+
+bool GLLabel::init(const char *text,const char *fontName,float fontSize, Color4B color)
+{
+    return GLMutableLineLabel::init(text,fontName,fontSize,color,.0,.0);
 }
 

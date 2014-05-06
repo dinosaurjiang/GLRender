@@ -94,7 +94,7 @@ kmVec2 GLObject2D::size()
 
 void GLObject2D::setTexture(GLTexture * tex)
 {
-    if(tex == nullptr || _texture == tex) return;
+    if(_texture == tex) return;
     _texture = tex;
     this->initTexCoord();
 }
@@ -262,7 +262,9 @@ void GLSprite::visit()
     this->transform();
     this->usePorgram();
     _blend.blend();
-    if(_texture)_texture->bind();
+
+    if(_texture)
+        _texture->bind();
     
     int strike = sizeof(PerPointInfo);
 	char * startAddr = (char *)&_quadInfo;

@@ -51,42 +51,9 @@
 #define FrameRate 60.0
 #define FrameInterval (1.0/FrameRate)
 
-static OpenGLManager * __manager_instance = nil;
-
-void __my_OpenGLSizeDidChangeCallback(int w, int h)
-{
-    NSLog(@"view size did changed:%dx%d",w,h);
-    GLSupport::openGLViewSizeDidChangeCallback(w, h);
-    
-    if (__manager_instance)
-    {
-        [__manager_instance openGLSizeChangeCallbackFunc:w height:h];
-    }
-#ifdef DEBUG
-    else
-    {
-        NSLog(@"size changed callback:manager is nil");
-    }
-#endif
-}
-
-
-static void __my_OpenGLDisplayCallback()
-{
-    if (__manager_instance)
-    {
-        [__manager_instance openGLDisplayCallbackFunc];
-    }
-#ifdef DEBUG
-    else
-    {
-        NSLog(@"display callback:manager is nil");
-    }
-#endif
-}
 
 static GLScene * curScene;
-static GLSprite * myObject;
+static GLLabel * myObject;
 
 
 @interface OpenGLManager()
@@ -96,14 +63,15 @@ static GLSprite * myObject;
 
 @implementation OpenGLManager
 
-- (void)awakeFromNib
+
+-(void)timerCallback:(NSTimer *)timer
 {
-    __manager_instance = self;
-    
-    // then add display call back
-    [_openGLView setOpenGLSizeDidChangeCallback:__my_OpenGLSizeDidChangeCallback];
-    [_openGLView setOpenGLDisplayCallback:__my_OpenGLDisplayCallback];
-    
+    [_openGLView redraw];
+}
+
+-(void) openGLViewDidReady:(OpenGLView *)glview
+{
+    self.openGLView = glview;
     if (_refresh_timer == nil)
     {
         _refresh_timer = [NSTimer scheduledTimerWithTimeInterval:FrameInterval
@@ -114,17 +82,11 @@ static GLSprite * myObject;
     }
 }
 
-
--(void)timerCallback:(NSTimer *)timer
-{
-    [_openGLView redraw];
-}
-
-
--(void)openGLSizeChangeCallbackFunc:(int)width height:(int)height
+-(void)openGLSizeChangeCallbackFunc:(CGFloat)width height:(CGFloat)height
 {
     _glWidth = width;
     _glHeight = height;
+    GLSupport::openGLViewSizeDidChangeCallback(width, height);
 }
 
 -(void)openGLDisplayCallbackFunc
@@ -134,8 +96,9 @@ static GLSprite * myObject;
         string tname("THIS IS TEST STRING");
         string tfname("Marker Felt");
         
-        myObject = new GLLabel(tname,24.0,tfname,MakeColor4B(255, 0, 0, 255),kGLHTextAlignmentCenter,kGLVTextAlignmentTop,kGLLineBreakModeWordWrap);
-//        myObject->setPosition(100, 100);
+        myObject = new GLLabel();
+        myObject->init(tname,tfname,24.0,MakeColor4B(255, 0, 0, 255),kGLHTextAlignmentCenter,kGLVTextAlignmentTop,kGLLineBreakModeWordWrap);
+        myObject->setPosition(100, 100);
         myObject->setZDepth(2);
         
         curScene = new GLScene();
@@ -159,34 +122,35 @@ static GLSprite * myObject;
 @end
 
 
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
 #pragma mark -
 #pragma mark opengl view
 
+static OpenGLManager * _manager_instance_ = nil;
+
+
 @implementation OpenGLView
 
--(void)setOpenGLSizeDidChangeCallback:(OpenGLSizeDidChangeCallback)callback
+-(Class)managerClass
 {
-    @synchronized(self)
-    {
-        _size_change_callback = callback;
-    }
+    return [OpenGLManager class];
 }
-
--(void)setOpenGLDisplayCallback:(OpenGLDisplayCallback)callback
-{
-    @synchronized(self)
-    {
-        _display_callback = callback;
-    }
-}
-
 
 -(void)awakeFromNib
 {
+    if (_manager_instance_ == nil)
+    {
+        _manager_instance_ = [[[self managerClass] alloc] init];
+        self.manager = _manager_instance_;
+    }
+    
     [[self openGLContext] makeCurrentContext];
     [self  setWantsBestResolutionOpenGLSurface:YES];
     GLSupport::dumpInfo();
     [self viewDidEndLiveResize];
+    [self.manager openGLViewDidReady:self];
 }
 
 -(void)viewDidEndLiveResize
@@ -197,10 +161,8 @@ static GLSprite * myObject;
         GLsizei backingPixelWidth  = (GLsizei)(backingBounds.size.width),
         backingPixelHeight = (GLsizei)(backingBounds.size.height);
         
-        if(_size_change_callback)
-        {
-            _size_change_callback(backingPixelWidth, backingPixelHeight);
-        }
+        [self.manager openGLSizeChangeCallbackFunc:backingPixelWidth
+                                            height:backingPixelHeight];
     }
 }
 
@@ -208,10 +170,7 @@ static GLSprite * myObject;
 {
     CGLLockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
     // draw
-    if (_display_callback)
-    {
-        _display_callback();
-    }
+    [_manager openGLDisplayCallbackFunc];
     CGLUnlockContext((CGLContextObj)[[self openGLContext] CGLContextObj]);
 }
 

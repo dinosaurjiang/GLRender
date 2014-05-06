@@ -8,36 +8,43 @@
 
 #import <Foundation/Foundation.h>
 
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 @class OpenGLView;
-@interface OpenGLManager : NSObject
-{
-    NSTimer * _refresh_timer;
-    int _glWidth,_glHeight;
-}
+@protocol OpenGLManagerProtocal <NSObject>
 
-@property (nonatomic, assign) IBOutlet OpenGLView *  openGLView;
-
--(void)openGLSizeChangeCallbackFunc:(int)width height:(int)height;
+@required
+-(void) openGLViewDidReady:(OpenGLView *)glview;
+-(void)openGLSizeChangeCallbackFunc:(CGFloat)width height:(CGFloat)height;
 -(void)openGLDisplayCallbackFunc;
 
 @end
 
 
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 
-
-typedef void (*OpenGLSizeDidChangeCallback)(int w, int h);
-typedef void (*OpenGLDisplayCallback)();
-
-
-@interface OpenGLView : NSOpenGLView
+@class OpenGLView;
+@interface OpenGLManager : NSObject <OpenGLManagerProtocal>
 {
-    OpenGLDisplayCallback _display_callback;
-    OpenGLSizeDidChangeCallback _size_change_callback;
+    NSTimer * _refresh_timer;
+    CGFloat _glWidth,_glHeight;
 }
 
--(void)setOpenGLDisplayCallback:(OpenGLDisplayCallback)callback;
--(void)setOpenGLSizeDidChangeCallback:(OpenGLSizeDidChangeCallback)callback;
+@property (nonatomic, assign) IBOutlet OpenGLView *  openGLView;
 
+@end
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+@interface OpenGLView : NSOpenGLView
+
+@property (assign) id<OpenGLManagerProtocal> manager;
+
+-(Class)managerClass;
 -(void)redraw;
+
 @end
 

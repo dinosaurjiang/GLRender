@@ -3,7 +3,7 @@
 //  PhotoEncoder4Mac
 //
 //  Created by dinosaur on 13-12-30.
-//  Copyright (c) 2013年 dinosaur. All rights reserved.
+//  Copyright (c) 2013 dinosaur. All rights reserved.
 //
 
 #import "JCAppDelegate.h"

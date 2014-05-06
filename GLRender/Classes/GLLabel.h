@@ -43,15 +43,51 @@ public:
     
     DECLARE_CLASS(GLMutableLineLabel);
     
+    GLMutableLineLabel():GLSprite(){};
     ~GLMutableLineLabel();
-    GLMutableLineLabel(string & text,float fontSize,string & fontName, Color4B color,GLHTextAlignment halign,GLVTextAlignment valign,GLLineBreakMode breakMode,float width, float height);
-    GLMutableLineLabel(string & text,float fontSize,string & fontName, Color4B color,float width, float height);
+    bool init(string & text,
+                       string & fontName,
+                       float fontSize,
+                       Color4B color,
+                       GLHTextAlignment halign,
+                       GLVTextAlignment valign,
+                       GLLineBreakMode breakMode,
+                       float width,
+                       float height);
+    
+    
+    bool init(string & text,
+                       string & fontName,
+                       float fontSize,
+                       Color4B color,
+                       float width,
+                       float height);
+    
+    
+    
+    
+    bool init(const char * text,
+                       const char * fontName,
+                       float fontSize,
+                       Color4B color,
+                       GLHTextAlignment halign,
+                       GLVTextAlignment valign,
+                       GLLineBreakMode breakMode,
+                       float width,
+                       float height);
+    
+    
+    bool init(const char * text,
+                       const char * fontName,
+                       float fontSize,
+                       Color4B color,
+                       float width,
+                       float height);
     
     virtual void visit();
     virtual void usePorgram();
     
 private:
-    string      _text;
     float       _textSize;
     Color4B     _color;
     
@@ -68,10 +104,15 @@ class GLLabel : public GLMutableLineLabel
 public:
     
     DECLARE_CLASS(GLLabel);
-    
+    GLLabel():GLMutableLineLabel(){};
     ~GLLabel();
-    GLLabel(string & text,float fontSize,string & fontName, Color4B color,GLHTextAlignment halign,GLVTextAlignment valign,GLLineBreakMode breakMode);
-    GLLabel(string & text,float fontSize,string & fontName, Color4B color);
+    
+    bool init(string & text,string & fontName,float fontSize, Color4B color,GLHTextAlignment halign,GLVTextAlignment valign,GLLineBreakMode breakMode);
+    bool init(string & text,string & fontName,float fontSize, Color4B color);
+    
+    
+    bool init(const char *text,const char *fontName,float fontSize, Color4B color,GLHTextAlignment halign,GLVTextAlignment valign,GLLineBreakMode breakMode);
+    bool init(const char *text,const char *fontName,float fontSize, Color4B color);
 };
 
 

@@ -64,7 +64,7 @@ public:
     
     // 这些是不固定的。
     // but,是默认都有的
-    enum Uniform
+    enum
     {
         GL_objMatrix,
         GL_pMatrix,// project matrix
@@ -91,6 +91,7 @@ public:
      */
     bool loadShadersByName(const char * vsh, const char * fsh);
     bool loadShadersByName(string & vsh, string & fsh);
+    
     bool loadShadersByName(const char * vsh, const char * fsh,int attrib_flag);
     bool loadShadersByName(string & vsh, string & fsh, int attrib_flag);
     
@@ -100,16 +101,11 @@ public:
     bool loadShaders(const char * vsh, const char * fsh, int attrib_flag);
     bool validateProgram(GLuint prog);
     
-    
     // default programs.
     STATIC_PROGROM(ColorDraw,"ColorDraw.vsh","ColorDraw.fsh",color_flag)
-    
     STATIC_PROGROM(TextureDraw,"TextureDraw.vsh","TextureDraw.fsh",texcoord_flag)
-    
     STATIC_PROGROM(TextureColorDraw,"TextColorMix.vsh","TextColorMix.fsh",color_tex_flag)
-    
     STATIC_PROGROM(ParticleSystem,"ParticleSystem.vsh","ParticleSystem.fsh",color_tex_flag)
-    
     
     
     GLuint programID();
@@ -117,6 +113,12 @@ public:
     GLint uniformForName(string name);
     
     
+protected:
+    
+    // 这个方法主要是bind attribute的
+    // 默认只有三个attri 可以绑定。
+    // 这个方法是为了方便子类绑定额外的attri。
+    virtual void bindShaderAttributes(int flag);
     
 private:
     
@@ -125,7 +127,6 @@ private:
     bool linkProgram(GLuint prog);
     
     GLuint      _program = 0;
-    int         _attribFlag = 0b111;
     
     map<string, GLint> attrbute;
     map<string, GLint> uniform;

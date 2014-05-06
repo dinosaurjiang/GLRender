@@ -11,7 +11,6 @@
 
 #include <iostream>
 
-
 /*
 	所有类的基础类。
 	主要功能:声明了类的class。
