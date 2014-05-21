@@ -196,7 +196,7 @@ void GLParticleSystem::initGLParticleSystem(const char * json_data, unsigned lon
 
         if(tex == nullptr)
         {
-            tex = GLTextureManager::manager()->createTextureWithImageName(textureName);
+            tex = GLTexture::createTextureWithImageName(textureName);
         }
         
         if( tex )
@@ -836,23 +836,11 @@ void GLParticleSystem::updateBlendFunc()
 
 void GLParticleSystemQuad::usePorgram()
 {
-    UsingProgram(GLProgram::defaultParticleSystemProgram()->programID());
-    
-    GLint t;
-    if( (t=GLProgram::defaultParticleSystemProgram()->uniformForName(OBJ_MATRIX)) !=-1 )
-    {
-        glUniformMatrix4fv(t, 1, 0,this->_transformMatrix.mat);
-    }
-    
-    if( (t=GLProgram::defaultParticleSystemProgram()->uniformForName(PROJECT_MATRIX)) !=-1 )
-    {
-        glUniformMatrix4fv(t, 1, 0, GLSupport::projectionMatrix->mat);
-    }
-    
-    if( (t=GLProgram::defaultParticleSystemProgram()->uniformForName(MV_MATRIX)) !=-1 )
-    {
-        glUniformMatrix4fv(t, 1, 0, GLSupport::modelViewMatrix->mat);
-    }
+    UsingProgram(GLParticleSysProgram::getInstance()->programID());
+
+    GLParticleSysProgram::getInstance()->setupObjectMatrix(this->_transformMatrix.mat);
+    GLParticleSysProgram::getInstance()->setupProjectionMatrix(GLSupport::projectionMatrix->mat);
+    GLParticleSysProgram::getInstance()->setupModelViewMatrix(GLSupport::modelViewMatrix->mat);
 }
 
 GLParticleSystemQuad::~GLParticleSystemQuad()

@@ -97,7 +97,6 @@ private:
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 
-class GLTextureManager;
 class GLTexture : public GLBase
 {
     
@@ -105,7 +104,14 @@ public:
     
     DECLARE_CLASS(GLTexture)
     
+    static GLTexture * createTextureWithImageName(const char *  c_name);
+    static GLTexture * createTextureWithImageName(string & name);
+    static GLTexture * createTextureWithPNGDataAndName(const void * bytes,
+                                                       unsigned long length,
+                                                       string & name);
+
     GLTexture(TextureInfo info);
+    ~GLTexture();
     
     // those texture was create out-off texture manager.
     // suggest to cache it at manager
@@ -148,6 +154,15 @@ public:
         return _gltexture->_maxS;
     }
     
+    unsigned int textureGLName()
+    {
+        if(_gltexture)
+            return _gltexture->textureName();
+        return 0;
+    }
+    
+    GLTexture * retain();
+    
     void setAliasTexParameters();
     void setAntiAliasTexParameters();
     
@@ -160,10 +175,6 @@ protected:
     
     // for caching.
     static unsigned int previousTexture;
-    
-private:
-    ~GLTexture();
-    friend class GLTextureManager;
 };
 
 
@@ -179,11 +190,6 @@ public:
     
     DECLARE_CLASS(GLTextureManager)
     
-    GLTexture * createTextureWithImageName(const char *  c_name);
-    GLTexture * createTextureWithImageName(string & name);
-    GLTexture * createTextureWithPNGDataAndName(const void * bytes, unsigned long length,string & name);
-    GLTexture * getTextureWithName(string & name);
-    
     bool cacheTexture(GLTexture * texture,const char * cname);
     bool cacheTexture(GLTexture * texture,string & name);
     
@@ -193,70 +199,17 @@ public:
     
     void clearAllCache();
     
+    GLTexture * getTextureWithName(string & name);
+    
     static GLTextureManager * manager()
     {
         static GLTextureManager _manager_instance;
         return &_manager_instance;
     }
     
-    // for none-managed texture, use this method to delete it.
-    static void deleteTexture(GLTexture * texture)
-    {
-        if (texture)
-            delete texture;
-    }
-    
-    static unsigned int textureName(GLTexture *tex)
-    {
-        if(tex)
-            return tex->_gltexture->textureName();
-        return 0;
-    }
 private:
     map<string, GLTexture *> _textureList;
 };
-
-
-
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
-
-
-class GLTextureFrameSheet
-{
-public:
-    ~GLTextureFrameSheet();
-    GLTextureFrameSheet() = default;
-    void initWithData(const char * data, long length);
-    
-    // the GLTexture will auto cache in Manager.
-    GLTexture * createTextureWithName(const char * cname);
-    GLTexture * createTextureWithName(const string & name);
-    
-private:
-    
-    class FrameSheetItem
-    {
-    public:
-        string  name;
-        kmVec2 size;
-        kmVec4 frame;
-        FrameSheetItem & operator= (FrameSheetItem & one)
-        {
-            this->name = one.name;
-            this->size = one.size;
-            this->frame = one.frame;
-            return (*this);
-        };
-    };
-    
-    map<string, FrameSheetItem> _frameSheetItems;
-    GLTexture * _frameSheet;
-    
-    GLTexture * createTextureWithFrame(kmVec4 frame,  string & cacheName);
-    GLTexture * createTextureWithFrame(kmVec4 frame, const char * cacheCName);
-};
-
 
 
 #endif /* defined(__GLRender__GLTexture__) */

@@ -24,6 +24,13 @@ GLTextureName::~GLTextureName()
 ///////////////////////////////////////////////////////////////
 
 
+GLTexture * GLTexture::retain()
+{
+    _gltexture->retain();
+    return this;
+}
+
+
 GLTexture::~GLTexture()
 {
     if(_gltexture)
@@ -127,12 +134,12 @@ void GLTexture::setAntiAliasTexParameters()
 ///////////////////////////////////////////////////////////////
 
 
-GLTexture * GLTextureManager::createTextureWithImageName(const char *  c_name)
+GLTexture * GLTexture::createTextureWithImageName(const char *  c_name)
 {
     string name(c_name);
-    return this->createTextureWithImageName(name);
+    return GLTexture::createTextureWithImageName(name);
 }
-GLTexture * GLTextureManager::createTextureWithImageName(string & name)
+GLTexture * GLTexture::createTextureWithImageName(string & name)
 {
     TextureInfo info =  createGLTextureWithImageNameAPPLE(name);
     GLTexture * texture = new GLTexture(info);
@@ -140,14 +147,12 @@ GLTexture * GLTextureManager::createTextureWithImageName(string & name)
     {
         return nullptr;
     }
-    string last = lastPathComponent(name);
-    _textureList[last] = texture;
     return texture;
 }
 
-GLTexture * GLTextureManager::createTextureWithPNGDataAndName(const void * bytes,
-                                                              unsigned long length,
-                                                              string & name)
+GLTexture * GLTexture::createTextureWithPNGDataAndName(const void * bytes,
+                                                       unsigned long length,
+                                                       string & name)
 {
     TextureInfo info =  createGLTextureWithPNGImageDataAPPLE(bytes,length);
     GLTexture * texture = new GLTexture(info);
@@ -155,10 +160,14 @@ GLTexture * GLTextureManager::createTextureWithPNGDataAndName(const void * bytes
     {
         return nullptr;
     }
-    string last = lastPathComponent(name);
-    _textureList[last] = texture;
     return texture;
 }
+
+
+
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
 
 
 GLTexture * GLTextureManager::getTextureWithName(string & name)
@@ -263,103 +272,4 @@ void GLTextureManager::clearAllCache()
     }
     
     _textureList.clear();
-}
-
-#pragma mark -
-#pragma mark GLTextureFrameSheet
-
-
-#include "reader.h"
-#include "Utilities.h"
-
-
-GLTextureFrameSheet::~GLTextureFrameSheet()
-{
-    // remove sub texture from texture manager
-    map<string, FrameSheetItem>::iterator map_it = _frameSheetItems.begin();
-    while (map_it != _frameSheetItems.end())
-    {
-        string name = map_it->first;
-        GLTextureManager::manager()->removeCacheTexture(name);
-        map_it++;
-    }
-    
-    // remove frame sheet
-    GLTextureManager::manager()->removeCacheTexture(_frameSheet);
-}
-
-void GLTextureFrameSheet::initWithData(const char * data, long length)
-{
-    // begin read.
-    string * json_doc_string = new string(data);
-    Json::Reader * json_reader = new Json::Reader();
-    Json::Value rootValue;
-    json_reader->parse(*json_doc_string, rootValue);
-    
-    
-    // first get the texture from manager
-    Json::Value defaultValue(Json::nullValue);
-    Json::Value textureName = rootValue.get("frameSheet", defaultValue);
-    string textNameStr = textureName.asString();
-    
-    if (textNameStr.length() > 0)
-        _frameSheet = GLTextureManager::manager()->getTextureWithName(textNameStr);
-    
-    if(_frameSheet == nullptr)
-    {
-        Exception("Bad Data File", "could not found texture for frame sheet");
-    }
-    
-    Json::Value frames = rootValue.get("items", defaultValue);
-    unsigned int size = frames.size();
-    for (int i = 0; i < size ; i++)
-    {
-        Json::Value item = frames.get(i, defaultValue);
-        if (item == defaultValue)
-            continue;
-        
-        FrameSheetItem entity;
-        entity.name = item.get("name", defaultValue).asString();
-        kmVec2FromString(&entity.size, item.get("size", defaultValue).asCString());
-        kmVec4FromString(&entity.frame, item.get("drawRect", defaultValue).asCString());
-        
-        _frameSheetItems[entity.name] = entity;
-        
-        LOG("%s, size:%s,drawRect:%s",entity.name.c_str(),item.get("size", defaultValue).asCString(),item.get("drawRect", defaultValue).asCString());
-    }
-    
-    // end read.
-    // release the data.
-    delete json_doc_string;
-    delete json_reader;
-}
-
-GLTexture * GLTextureFrameSheet::createTextureWithFrame(kmVec4 frame, string & cacheName)
-{
-    GLTexture * temp = GLTextureManager::manager()->getTextureWithName(cacheName);
-    if(temp) return temp;
-    
-    temp = _frameSheet->subTextureWithFrame(frame);
-    GLTextureManager::manager()->cacheTexture(temp, cacheName);
-    return temp;
-}
-
-GLTexture * GLTextureFrameSheet::createTextureWithFrame(kmVec4 frame,const char * cacheCName)
-{
-    string cppName(cacheCName);
-    return this->createTextureWithFrame(frame, cppName);
-}
-
-GLTexture * GLTextureFrameSheet::createTextureWithName(const char * cname)
-{
-    string cppName(cname);
-    return this->createTextureWithName(cppName);
-}
-
-GLTexture * GLTextureFrameSheet::createTextureWithName(const string & name)
-{
-    map<string, FrameSheetItem>::iterator it = _frameSheetItems.find(name);
-    if(it == _frameSheetItems.end()) return nullptr;
-    FrameSheetItem item = it->second;
-    return this->createTextureWithFrame(item.frame, item.name);
 }

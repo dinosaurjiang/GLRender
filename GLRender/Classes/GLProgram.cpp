@@ -34,22 +34,12 @@ GLProgram::~GLProgram()
 
 bool GLProgram::loadShadersByName(const char * vsh, const char * fsh)
 {
-    return this->loadShadersByName(vsh, fsh, (color_flag|texcoord_flag));
-}
-
-bool GLProgram::loadShadersByName(const char * vsh, const char * fsh, int flag)
-{
     string tvsh(vsh);
     string tfsh(fsh);
-    return this->loadShadersByName(tvsh, tfsh, flag);
+    return this->loadShadersByName(tvsh, tfsh);
 }
 
 bool GLProgram::loadShadersByName(string & vsh, string & fsh)
-{
-    return this->loadShadersByName(vsh, fsh, (color_flag|texcoord_flag));
-}
-
-bool GLProgram::loadShadersByName(string & vsh, string & fsh, int flag)
 {
     char * vertexBuff = NULL;
     char * fragmentBuff = NULL;
@@ -65,7 +55,7 @@ bool GLProgram::loadShadersByName(string & vsh, string & fsh, int flag)
     if(flen == 0)
         goto FAILED;
     
-    ret = this->loadShaders(vertexBuff, fragmentBuff, flag);
+    ret = this->loadShaders(vertexBuff, fragmentBuff);
     
 
 FAILED:
@@ -79,12 +69,6 @@ FAILED:
 }
 
 bool GLProgram::loadShaders(const char * vsh, const char * fsh)
-{
-    return this->loadShaders(vsh,fsh,(color_flag|texcoord_flag));
-}
-
-
-bool GLProgram::loadShaders(const char * vsh, const char * fsh, int flag)
 {
     GLuint vertShader = 0, fragShader = 0;
     
@@ -112,7 +96,9 @@ bool GLProgram::loadShaders(const char * vsh, const char * fsh, int flag)
     // Attach fragment shader to program.
     glAttachShader(_program, fragShader);
     
-    this->bindShaderAttributes(flag);
+    
+    this->bind_attrbutes();
+    
     
     // Link program.
     if (!(this->linkProgram(_program)))
@@ -152,20 +138,6 @@ bool GLProgram::loadShaders(const char * vsh, const char * fsh, int flag)
     return true;
 }
 
-void GLProgram::bindShaderAttributes(int flag)
-{
-    
-    // Bind attribute locations.
-    // This needs to be done prior to linking.
-    // position must be load
-    glBindAttribLocation(_program, GLProgram::ATTRIB_VERTEX,   "a_position");
-    
-    if(flag & color_flag)
-        glBindAttribLocation(_program, GLProgram::ATTRIB_COLOR,    "a_color");
-    
-    if(flag & texcoord_flag)
-        glBindAttribLocation(_program, GLProgram::ATTRIB_TEXCOORD, "a_texCoord");
-}
 
 bool GLProgram::compileShader(GLuint * shader, GLenum type ,const GLchar * source)
 {
@@ -252,8 +224,8 @@ bool GLProgram::validateProgram(GLuint prog)
 
 void GLProgram::updateAttrbu_Uniform()
 {
-    attrbute.clear();
-    uniform.clear();
+    _attrbute.clear();
+    _uniform.clear();
     
     LOG("=====>START:%s<=====",__func__);
     
@@ -268,7 +240,7 @@ void GLProgram::updateAttrbu_Uniform()
     {
         glGetActiveAttrib(_program, i, MAX_NAME_LENGTH, NULL, NULL, NULL, rawName);
         string name(rawName);
-        attrbute[name] = glGetAttribLocation(_program, rawName);
+        _attrbute[name] = glGetAttribLocation(_program, rawName);
         LOG("found attribute:%s" , name.c_str() );
     }
     
@@ -279,11 +251,20 @@ void GLProgram::updateAttrbu_Uniform()
     {
         glGetActiveUniform(_program, i, MAX_NAME_LENGTH, NULL, NULL, NULL, rawName);
         string name(rawName);
-        uniform[name] = glGetUniformLocation(_program, rawName);
+        _uniform[name] = glGetUniformLocation(_program, rawName);
         LOG("found uniforms:%s" , name.c_str() );
     }
     
     LOG("=====>END:%s<=====",__func__);
+    
+    
+    ///// update uniform
+    
+    _uniformCache[static_cast<int>(DefaultUniform::GL_ObjMatrix)] = this->uniformForName(keyObjectMatrix);
+    _uniformCache[static_cast<int>(DefaultUniform::GL_ProjectMatrix)] = this->uniformForName(keyProjectMatrix);
+    _uniformCache[static_cast<int>(DefaultUniform::GL_MVMatrix)] = this->uniformForName(keyMVMatrix);
+    _uniformCache[static_cast<int>(DefaultUniform::GL_AlphaValue)] = this->uniformForName(keyAlphaValue);
+    _uniformCache[static_cast<int>(DefaultUniform::GL_Texture1)] = this->uniformForName(keyTexture1);
 }
 
 
@@ -292,11 +273,18 @@ GLuint GLProgram::programID()
     return _program;
 }
 
+void GLProgram::bind_attrbutes()
+{
+    glBindAttribLocation(_program, GLProgram::ATTRIB_VERTEX,   keyAttrVertex);
+    glBindAttribLocation(_program, GLProgram::ATTRIB_COLOR,    keyAttrColor);
+    glBindAttribLocation(_program, GLProgram::ATTRIB_TEXCOORD, keyAttrTexCoord);
+}
+
 
 GLint GLProgram::attributeForName(std::string name)
 {
-    map<string, GLint>::iterator  it = attrbute.find(name);
-    if (it == attrbute.end())
+    map<string, GLint>::iterator  it = _attrbute.find(name);
+    if (it == _attrbute.end())
     {
         // not find
         LOG( "not found attribute by name:[%s]" , name.c_str() );
@@ -305,14 +293,100 @@ GLint GLProgram::attributeForName(std::string name)
     return it->second;
 }
 
+GLint GLProgram::getUniform(DefaultUniform type)
+{
+    return _uniformCache[static_cast<int>(type)];
+}
+
 GLint GLProgram::uniformForName(std::string name)
 {
-    map<string, GLint>::iterator  it = uniform.find(name);
-    if (it == uniform.end())
+    map<string, GLint>::iterator  it = _uniform.find(name);
+    if (it == _uniform.end())
     {
         // not find
         LOG( "not found uniform by name:[%s]" , name.c_str() );
         return -1;
     }
     return it->second;
+}
+
+bool GLProgram::setFloat1ForUniform(DefaultUniform type, GLfloat value)
+{
+    int index = static_cast<int>(type);
+    if (_uniformCache[index] != -1)
+    {
+        glUniform1f(_uniformCache[index],  value);
+        return true;
+    }
+    return false;
+}
+
+bool GLProgram::setMatrix4fForUniform(DefaultUniform type, GLfloat * values)
+{
+    int index = static_cast<int>(type);
+    if (_uniformCache[index] != -1)
+    {
+        glUniformMatrix4fv(_uniformCache[index], 1, 0, values);
+        return true;
+    }
+    return false;
+}
+
+bool GLProgram::setupObjectMatrix(GLfloat * mat)
+{
+    return this->setMatrix4fForUniform(DefaultUniform::GL_ObjMatrix, mat);
+}
+
+bool GLProgram::setupModelViewMatrix(GLfloat * mat)
+{
+    return this->setMatrix4fForUniform(DefaultUniform::GL_MVMatrix, mat);
+}
+
+bool GLProgram::setupProjectionMatrix(GLfloat * mat)
+{
+    return this->setMatrix4fForUniform(DefaultUniform::GL_ProjectMatrix, mat);
+}
+
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+
+void GLColorDrawProgram::bind_attrbutes()
+{
+    glBindAttribLocation(this->programID(), GLProgram::ATTRIB_VERTEX,   keyAttrVertex);
+    glBindAttribLocation(this->programID(), GLProgram::ATTRIB_COLOR,    keyAttrColor);
+}
+
+
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+
+void GLTextureDrawProgram::bind_attrbutes()
+{
+    glBindAttribLocation(this->programID(), GLProgram::ATTRIB_VERTEX,   keyAttrVertex);
+    glBindAttribLocation(this->programID(), GLProgram::ATTRIB_TEXCOORD, keyAttrTexCoord);
+}
+
+
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+
+void GLTextureColorDrawProgram::bind_attrbutes()
+{
+    glBindAttribLocation(this->programID(), GLProgram::ATTRIB_VERTEX,   keyAttrVertex);
+    glBindAttribLocation(this->programID(), GLProgram::ATTRIB_COLOR,    keyAttrColor);
+    glBindAttribLocation(this->programID(), GLProgram::ATTRIB_TEXCOORD, keyAttrTexCoord);
+}
+
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+
+void GLParticleSysProgram::bind_attrbutes()
+{
+    glBindAttribLocation(this->programID(), GLProgram::ATTRIB_VERTEX,   keyAttrVertex);
+    glBindAttribLocation(this->programID(), GLProgram::ATTRIB_COLOR,    keyAttrColor);
+    glBindAttribLocation(this->programID(), GLProgram::ATTRIB_TEXCOORD, keyAttrTexCoord);
 }

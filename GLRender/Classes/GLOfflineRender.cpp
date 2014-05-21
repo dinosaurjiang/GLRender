@@ -21,7 +21,7 @@ GLOfflineRender::~GLOfflineRender()
     // when delete, also delete the texture.
     // if you want to keep texture.
     // keep call keepTexture() function to get a copy texture.
-    GLTextureManager::deleteTexture(_canvasTexture);
+    delete _canvasTexture;
 	glDeleteFramebuffers(1, &_FBO);
 	if (_depthRenderBufffer)
 		glDeleteRenderbuffers(1, &_depthRenderBufffer);
@@ -67,7 +67,10 @@ GLOfflineRender::GLOfflineRender(unsigned int width, unsigned int height)
     glBindFramebuffer(GL_FRAMEBUFFER, _FBO);
     
     
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, GLTextureManager::textureName(_canvasTexture),0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,
+                           GL_COLOR_ATTACHMENT0,
+                           GL_TEXTURE_2D,
+                           _canvasTexture->textureGLName(),0);
     
     // default did not use depth buff
     GLuint depthStencilFormat = 0;

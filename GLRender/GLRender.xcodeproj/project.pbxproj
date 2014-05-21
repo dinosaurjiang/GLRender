@@ -43,12 +43,9 @@
 		9D05162218710FBE00B246FA /* vec2.c in Sources */ = {isa = PBXBuildFile; fileRef = 9D4C87CF184F0AA30087F119 /* vec2.c */; };
 		9D05162318710FBE00B246FA /* vec3.c in Sources */ = {isa = PBXBuildFile; fileRef = 9D4C87D0184F0AA30087F119 /* vec3.c */; };
 		9D05162418710FBE00B246FA /* vec4.c in Sources */ = {isa = PBXBuildFile; fileRef = 9D4C87D1184F0AA30087F119 /* vec4.c */; };
-		9D05162518710FBE00B246FA /* MD2Loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D66F024186BC5B800BE2C01 /* MD2Loader.cpp */; };
 		9D05162618710FBE00B246FA /* GLObjectBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D00A745186AB19200B9C1A0 /* GLObjectBase.cpp */; };
 		9D05162718710FBE00B246FA /* GLObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DA8EBC11847298600D91848 /* GLObject.cpp */; };
 		9D05162818710FBE00B246FA /* GLLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D7C79011862910C00BD5694 /* GLLabel.cpp */; };
-		9D05162918710FBE00B246FA /* GLScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DABDAF5186934750084043F /* GLScene.cpp */; };
-		9D05162A18710FBE00B246FA /* GLSceneTransform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D66F028186C207E00BE2C01 /* GLSceneTransform.cpp */; };
 		9D05162B18710FBE00B246FA /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DA8EBC518472B9200D91848 /* GLTexture.cpp */; };
 		9D05162C18710FBE00B246FA /* GLProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DA8EBC918472BA800D91848 /* GLProgram.cpp */; };
 		9D05162D18710FBE00B246FA /* GLBlender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D8E4BC518559D8900E46CE5 /* GLBlender.cpp */; };
@@ -255,10 +252,6 @@
 		9D4C87CF184F0AA30087F119 /* vec2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vec2.c; sourceTree = "<group>"; };
 		9D4C87D0184F0AA30087F119 /* vec3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vec3.c; sourceTree = "<group>"; };
 		9D4C87D1184F0AA30087F119 /* vec4.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vec4.c; sourceTree = "<group>"; };
-		9D66F024186BC5B800BE2C01 /* MD2Loader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MD2Loader.cpp; sourceTree = "<group>"; };
-		9D66F025186BC5B800BE2C01 /* MD2Loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MD2Loader.h; sourceTree = "<group>"; };
-		9D66F028186C207E00BE2C01 /* GLSceneTransform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSceneTransform.cpp; sourceTree = "<group>"; };
-		9D66F029186C207E00BE2C01 /* GLSceneTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLSceneTransform.h; sourceTree = "<group>"; };
 		9D674800186184BF0064A66E /* libpng15.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng15.a; path = ../../../../../../usr/local/lib/libpng15.a; sourceTree = "<group>"; };
 		9D6CDA85184D824400279F1A /* GLBlender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLBlender.h; sourceTree = "<group>"; };
 		9D6CDA87184DC36B00279F1A /* Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
@@ -320,8 +313,6 @@
 		9DA8EBC618472B9200D91848 /* GLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTexture.h; sourceTree = "<group>"; };
 		9DA8EBC918472BA800D91848 /* GLProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProgram.cpp; sourceTree = "<group>"; };
 		9DA8EBCA18472BA800D91848 /* GLProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProgram.h; sourceTree = "<group>"; };
-		9DABDAF5186934750084043F /* GLScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLScene.cpp; sourceTree = "<group>"; };
-		9DABDAF6186934750084043F /* GLScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLScene.h; sourceTree = "<group>"; };
 		9DD8B45718482AB800E2A7C0 /* GLRenderPlatformHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GLRenderPlatformHelper.mm; sourceTree = "<group>"; };
 		9DD8B45818482AB800E2A7C0 /* GLRenderPlatformHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRenderPlatformHelper.h; sourceTree = "<group>"; };
 		9DD8B45B18482DFF00E2A7C0 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -566,8 +557,6 @@
 		9D66F023186BC4F600BE2C01 /* 3DObject */ = {
 			isa = PBXGroup;
 			children = (
-				9D66F024186BC5B800BE2C01 /* MD2Loader.cpp */,
-				9D66F025186BC5B800BE2C01 /* MD2Loader.h */,
 			);
 			path = 3DObject;
 			sourceTree = "<group>";
@@ -706,12 +695,8 @@
 				9DA8EBC21847298600D91848 /* GLObject.h */,
 				9D7C79011862910C00BD5694 /* GLLabel.cpp */,
 				9D7C79021862910C00BD5694 /* GLLabel.h */,
-				9DABDAF5186934750084043F /* GLScene.cpp */,
-				9DABDAF6186934750084043F /* GLScene.h */,
 				9D7FA13219167F5E00061A51 /* GLValue.cpp */,
 				9D7FA13319167F5E00061A51 /* GLValue.h */,
-				9D66F028186C207E00BE2C01 /* GLSceneTransform.cpp */,
-				9D66F029186C207E00BE2C01 /* GLSceneTransform.h */,
 				9DA8EBC518472B9200D91848 /* GLTexture.cpp */,
 				9DA8EBC618472B9200D91848 /* GLTexture.h */,
 				9DA8EBC918472BA800D91848 /* GLProgram.cpp */,
@@ -908,7 +893,6 @@
 				9D7F50BD1914A7E400C4768D /* TextColorMix.vsh in Sources */,
 				9D05169D18714F8500B246FA /* ldebug.c in Sources */,
 				9D0516AB18714F8500B246FA /* lparser.c in Sources */,
-				9D05162518710FBE00B246FA /* MD2Loader.cpp in Sources */,
 				9D0516B418714F8500B246FA /* lvm.c in Sources */,
 				9D0516A318714F8500B246FA /* liolib.c in Sources */,
 				9D0516A918714F8500B246FA /* lopcodes.c in Sources */,
@@ -921,9 +905,7 @@
 				9D051637187111AC00B246FA /* GLRenderPlatformHelper.mm in Sources */,
 				9D05162818710FBE00B246FA /* GLLabel.cpp in Sources */,
 				9D0516B618714F8500B246FA /* print.c in Sources */,
-				9D05162918710FBE00B246FA /* GLScene.cpp in Sources */,
 				9D7F50BC1914A7E400C4768D /* TextColorMix.fsh in Sources */,
-				9D05162A18710FBE00B246FA /* GLSceneTransform.cpp in Sources */,
 				9D05169F18714F8500B246FA /* ldump.c in Sources */,
 				9D05162B18710FBE00B246FA /* GLTexture.cpp in Sources */,
 				9D05162C18710FBE00B246FA /* GLProgram.cpp in Sources */,

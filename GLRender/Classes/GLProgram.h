@@ -17,11 +17,16 @@
 #include "DefaultShader.h"
 
 
-#define OBJ_MATRIX "a_objMatrix"
-#define PROJECT_MATRIX "a_pMatrix"
-#define MV_MATRIX "a_mvMatrix"
-#define ALPHA "a_alpha"
-#define TEXTURE1 "a_texCoord"
+#define keyObjectMatrix         "a_objMatrix"
+#define keyProjectMatrix        "a_pMatrix"
+#define keyMVMatrix             "a_mvMatrix"
+#define keyAlphaValue           "a_alpha"
+#define keyTexture1             "a_texCoord"
+
+
+#define keyAttrVertex   "a_position"
+#define keyAttrColor    "a_color"
+#define keyAttrTexCoord "a_texCoord"
 
 
 // let OpenGL Using program.
@@ -30,26 +35,18 @@
 void UsingProgram(GLuint program);
 
 
+using namespace std;
 
-#define STATIC_PROGROM( NAME, VSH, FSH, FLAG) \
-static GLProgram * default ## NAME ## Program () \
-{ \
-    static GLProgram * NAME ## _instance = nullptr; \
-    if ( NAME ## _instance == nullptr ) \
-    { \
-        NAME ## _instance = new GLProgram(); \
-        if( NAME ## _instance->loadShadersByName(VSH,FSH,FLAG) == false) \
-        {\
-            Exception("load failed.", "can not load program for OpenGL:"  VSH  "," FSH);\
-        }\
-    }\
-    return NAME ## _instance;\
+
+enum class DefaultUniform
+{
+    GL_ObjMatrix,
+    GL_ProjectMatrix,// project matrix
+    GL_MVMatrix,// model view matrix
+    GL_AlphaValue,
+    GL_Texture1
 };
 
-
-
-
-using namespace std;
 
 class GLProgram : GLBase
 {
@@ -58,31 +55,16 @@ public:
     
     DECLARE_CLASS(GLProgram);
     
-    const static int color_flag = 1;
-    const static int texcoord_flag = 2;
-    const static int color_tex_flag = 3;
-    
     // 这些是不固定的。
     // but,是默认都有的
-    enum
-    {
-        GL_objMatrix,
-        GL_pMatrix,// project matrix
-        GL_mvMatrix,// model view matrix
-        GL_alpha,
-        GL_texture1,
-        N_Uniform
-    };
-    
-    
-    enum
+    enum Attribute
     {
         ATTRIB_VERTEX,
         ATTRIB_COLOR,
-        ATTRIB_TEXCOORD,
-        
-        NUM_ATTRIBUTES
+        ATTRIB_TEXCOORD
     };
+    
+    
     
     GLProgram() = default;
     ~GLProgram();
@@ -92,33 +74,30 @@ public:
     bool loadShadersByName(const char * vsh, const char * fsh);
     bool loadShadersByName(string & vsh, string & fsh);
     
-    bool loadShadersByName(const char * vsh, const char * fsh,int attrib_flag);
-    bool loadShadersByName(string & vsh, string & fsh, int attrib_flag);
     
     /*  load with GLSL srouces strings.
      */
     bool loadShaders(const char * vsh, const char * fsh);
-    bool loadShaders(const char * vsh, const char * fsh, int attrib_flag);
     bool validateProgram(GLuint prog);
     
-    // default programs.
-    STATIC_PROGROM(ColorDraw,"ColorDraw.vsh","ColorDraw.fsh",color_flag)
-    STATIC_PROGROM(TextureDraw,"TextureDraw.vsh","TextureDraw.fsh",texcoord_flag)
-    STATIC_PROGROM(TextureColorDraw,"TextColorMix.vsh","TextColorMix.fsh",color_tex_flag)
-    STATIC_PROGROM(ParticleSystem,"ParticleSystem.vsh","ParticleSystem.fsh",color_tex_flag)
-    
-    
     GLuint programID();
+    
     GLint attributeForName(string name);
     GLint uniformForName(string name);
+    GLint getUniform(DefaultUniform type);
     
+    
+    
+    bool setupObjectMatrix(GLfloat * mat);
+    bool setupModelViewMatrix(GLfloat * mat);
+    bool setupProjectionMatrix(GLfloat * mat);
+    
+    bool setMatrix4fForUniform(DefaultUniform type, GLfloat * values);
+    bool setFloat1ForUniform(DefaultUniform type, GLfloat value);
     
 protected:
     
-    // 这个方法主要是bind attribute的
-    // 默认只有三个attri 可以绑定。
-    // 这个方法是为了方便子类绑定额外的attri。
-    virtual void bindShaderAttributes(int flag);
+    virtual void bind_attrbutes();
     
 private:
     
@@ -126,11 +105,73 @@ private:
     bool compileShader(GLuint * shader, GLenum type ,const GLchar * source);
     bool linkProgram(GLuint prog);
     
-    GLuint      _program = 0;
     
-    map<string, GLint> attrbute;
-    map<string, GLint> uniform;
+    GLuint      _program = 0;
+    GLint       _uniformCache[5];
+    
+    
+    map<string, GLint> _attrbute;
+    map<string, GLint> _uniform;
 };
 
+
+#define ProgramCreateFunc(_NAME_,VSH,FSH) \
+static GL ## _NAME_ ## Program * getInstance() {\
+    static GL ## _NAME_ ## Program * _NAME_ ## _Instance_ = nullptr; \
+    if (_NAME_ ## _Instance_ == nullptr) { \
+        _NAME_ ## _Instance_ = new GL ## _NAME_ ## Program(); \
+        if( _NAME_ ## _Instance_->loadShadersByName(VSH,FSH) == false) { \
+            Exception("load failed.", "can not load program for OpenGL:"  VSH  "," FSH);\
+        }\
+    }\
+    return _NAME_ ## _Instance_; }
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+
+class GLColorDrawProgram : public GLProgram
+{
+public:
+    ProgramCreateFunc(ColorDraw,"ColorDraw.vsh","ColorDraw.fsh");
+protected:
+    
+    virtual void bind_attrbutes();
+};
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+
+class GLTextureDrawProgram : public GLProgram
+{
+public:
+    ProgramCreateFunc(TextureDraw,"TextureDraw.vsh","TextureDraw.fsh")
+protected:
+    
+    virtual void bind_attrbutes();
+};
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+
+class GLTextureColorDrawProgram : public GLProgram
+{
+public:
+    ProgramCreateFunc(TextureColorDraw,"TextColorMix.vsh","TextColorMix.fsh")
+protected:
+    
+    virtual void bind_attrbutes();
+};
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+
+class GLParticleSysProgram : public GLProgram
+{
+public:
+    ProgramCreateFunc(ParticleSys,"ParticleSystem.vsh","ParticleSystem.fsh")
+protected:
+    
+    virtual void bind_attrbutes();
+};
 
 #endif /* defined(__GLRender__GLProgram__) */

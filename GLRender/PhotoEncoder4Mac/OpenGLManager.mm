@@ -46,13 +46,12 @@
 #include "GLParticleSystems.h"
 #include "GLLabel.h"
 #include "GLOfflineRender.h"
-#include "GLScene.h"
 
 #define FrameRate 60.0
 #define FrameInterval (1.0/FrameRate)
 
 
-static GLScene * curScene;
+static GLColorLayer * curScene;
 static GLLabel * myObject;
 
 
@@ -102,7 +101,7 @@ static GLLabel * myObject;
         myObject->setPosition(100, 100);
         myObject->setZDepth(2);
         
-        curScene = new GLScene();
+        curScene = new GLColorLayer();
         curScene->addChild(myObject);
     }
     

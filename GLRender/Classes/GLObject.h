@@ -116,7 +116,6 @@ public:
     
     void setTexture(GLTexture * tex);
     GLTexture * getTexture();
-
     
     // set color
     void setColor(Color4B start, Color4B end);
@@ -128,13 +127,15 @@ public:
 protected:
     GLBlender               _blend;
     Quad                    _quadInfo = {0};
-    GLTexture               *_texture = nullptr;
     
     void initPosition();
     void initTexCoord();
     void transform();
+    void bindTexture();
     
     friend GLObjectContainer;
+private:
+    GLTexture               *_texture = nullptr;
 };
 
 

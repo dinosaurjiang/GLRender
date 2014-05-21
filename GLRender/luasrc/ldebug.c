@@ -272,7 +272,6 @@ LUA_API int lua_getinfo (lua_State *L, const char *what, lua_Debug *ar) {
 #define checkreg(pt,reg)	check((reg) < (pt)->maxstacksize)
 
 
-
 static int precheck (const Proto *pt) {
   check(pt->maxstacksize <= MAXSTACK);
   check(pt->numparams+(pt->is_vararg & VARARG_HASARG) <= pt->maxstacksize);

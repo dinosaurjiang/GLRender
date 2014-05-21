@@ -16,7 +16,7 @@ using namespace std;
 
 GLMutableLineLabel::~GLMutableLineLabel()
 {
-    GLTextureManager::deleteTexture(_texture);
+    
 }
 
 
@@ -104,28 +104,13 @@ bool GLMutableLineLabel::init( const char * text,
 
 void GLMutableLineLabel::usePorgram()
 {
-    UsingProgram(GLProgram::defaultTextureColorDrawProgram()->programID());
+    UsingProgram(GLTextureColorDrawProgram::getInstance()->programID());
     
-    GLint t;
-    if( (t=GLProgram::defaultTextureColorDrawProgram()->uniformForName(OBJ_MATRIX)) !=-1 )
-    {
-        glUniformMatrix4fv(t, 1, 0,this->_transformMatrix.mat);
-    }
-    
-    if( (t=GLProgram::defaultTextureColorDrawProgram()->uniformForName(PROJECT_MATRIX)) !=-1 )
-    {
-        glUniformMatrix4fv(t, 1, 0, GLSupport::projectionMatrix->mat);
-    }
-    
-    if( (t=GLProgram::defaultTextureColorDrawProgram()->uniformForName(MV_MATRIX)) !=-1 )
-    {
-        glUniformMatrix4fv(t, 1, 0, GLSupport::modelViewMatrix->mat);
-    }
-    
-    if( (t=GLProgram::defaultTextureColorDrawProgram()->uniformForName(ALPHA)) !=-1 )
-    {
-        glUniform1f(t, this->getAlphaValue());
-    }
+    GLTextureColorDrawProgram::getInstance()->setupObjectMatrix(this->_transformMatrix.mat);
+    GLTextureColorDrawProgram::getInstance()->setupProjectionMatrix(GLSupport::projectionMatrix->mat);
+    GLTextureColorDrawProgram::getInstance()->setupModelViewMatrix(GLSupport::modelViewMatrix->mat);
+    GLTextureColorDrawProgram::getInstance()->setFloat1ForUniform(DefaultUniform::GL_AlphaValue,
+                                                                  this->getAlphaValue());
 }
 
 void GLMutableLineLabel::visit()
@@ -136,20 +121,13 @@ void GLMutableLineLabel::visit()
     
     _blend.blend();
     
-    if(_texture)
-        _texture->bind();
+    this->bindTexture();
     
     int strike = sizeof(PerPointInfo);
 	char * startAddr = (char *)&_quadInfo;
     
-#ifdef DEBUG
-    if(_texture==nullptr)
-    {
-        LOG("label has no texture.<%p:%s>",this,this->className());
-    }
-#endif
     
-    glEnableVertexAttribArray(GLProgram::GLProgram::ATTRIB_VERTEX );
+    glEnableVertexAttribArray(GLProgram::ATTRIB_VERTEX );
     glVertexAttribPointer(GLProgram::ATTRIB_VERTEX, 2,
                           GL_FLOAT, GL_FALSE,
                           strike, (void*)startAddr);

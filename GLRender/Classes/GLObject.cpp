@@ -101,10 +101,32 @@ kmVec2 GLObject2D::size()
     return {_boundingBox.x, _boundingBox.y};
 }
 
+
+void GLObject2D::bindTexture()
+{
+    if(_texture)
+        _texture->bind();
+#if DEBUG
+    else
+        LOG("no texture to bind:<%s|%p>",this->className(),this);
+#endif
+}
+
 void GLObject2D::setTexture(GLTexture * tex)
 {
     if(_texture == tex) return;
-    _texture = tex;
+    
+    if (_texture != nullptr)
+    {
+        delete _texture;
+    }
+    
+    if(tex)
+        _texture = tex->retain();
+    else
+        _texture = nullptr;
+    
+    
     this->initTexCoord();
 }
 
@@ -242,28 +264,13 @@ void GLObjectContainer::draw()
 
 void GLSprite::usePorgram()
 {
-    UsingProgram(GLProgram::defaultTextureDrawProgram()->programID());
+    UsingProgram(GLTextureDrawProgram::getInstance()->programID());
     
-    GLint t;
-    if( (t=GLProgram::defaultTextureDrawProgram()->uniformForName(OBJ_MATRIX)) !=-1 )
-    {
-        glUniformMatrix4fv(t, 1, 0,this->_transformMatrix.mat);
-    }
-    
-    if( (t=GLProgram::defaultTextureDrawProgram()->uniformForName(PROJECT_MATRIX)) !=-1 )
-    {
-        glUniformMatrix4fv(t, 1, 0, GLSupport::projectionMatrix->mat);
-    }
-    
-    if( (t=GLProgram::defaultTextureDrawProgram()->uniformForName(MV_MATRIX)) !=-1 )
-    {
-        glUniformMatrix4fv(t, 1, 0, GLSupport::modelViewMatrix->mat);
-    }
-    
-    if( (t=GLProgram::defaultTextureDrawProgram()->uniformForName(ALPHA)) !=-1 )
-    {
-        glUniform1f(t, this->getAlphaValue());
-    }
+    GLTextureDrawProgram::getInstance()->setupObjectMatrix(this->_transformMatrix.mat);
+    GLTextureDrawProgram::getInstance()->setupProjectionMatrix(GLSupport::projectionMatrix->mat);
+    GLTextureDrawProgram::getInstance()->setupModelViewMatrix(GLSupport::modelViewMatrix->mat);
+    GLTextureDrawProgram::getInstance()->setFloat1ForUniform(DefaultUniform::GL_AlphaValue,
+                                                                  this->getAlphaValue());
 }
 
 void GLSprite::visit()
@@ -272,8 +279,7 @@ void GLSprite::visit()
     this->usePorgram();
     _blend.blend();
 
-    if(_texture)
-        _texture->bind();
+    this->bindTexture();
     
     int strike = sizeof(PerPointInfo);
 	char * startAddr = (char *)&_quadInfo;
@@ -288,11 +294,6 @@ void GLSprite::visit()
                           GL_FLOAT, GL_FALSE,
                           strike, (void*)(startAddr + sizeof(float) * 2));
     glEnableVertexAttribArray( GLProgram::ATTRIB_TEXCOORD );
-    
-#ifdef DEBUG
-        if(_texture==nullptr)
-            LOG("sprite has no texture.<%p>",this);
-#endif
     
     // disable color
     // sprite do not draw backgound
@@ -318,28 +319,13 @@ void GLSprite::draw()
 ///////////////////////////////////////////////////////////////////////////
 void GLColorLayer::usePorgram()
 {
-    UsingProgram(GLProgram::defaultColorDrawProgram()->programID());
+    UsingProgram(GLColorDrawProgram::getInstance()->programID());
     
-    GLint t;
-    if( (t=GLProgram::defaultColorDrawProgram()->uniformForName(OBJ_MATRIX)) !=-1 )
-    {
-        glUniformMatrix4fv(t, 1, 0,this->_transformMatrix.mat);
-    }
-    
-    if( (t=GLProgram::defaultColorDrawProgram()->uniformForName(PROJECT_MATRIX)) !=-1 )
-    {
-        glUniformMatrix4fv(t, 1, 0, GLSupport::projectionMatrix->mat);
-    }
-    
-    if( (t=GLProgram::defaultColorDrawProgram()->uniformForName(MV_MATRIX)) !=-1 )
-    {
-        glUniformMatrix4fv(t, 1, 0, GLSupport::modelViewMatrix->mat);
-    }
-    
-    if( (t=GLProgram::defaultColorDrawProgram()->uniformForName(ALPHA)) !=-1 )
-    {
-        glUniform1f(t, this->getAlphaValue());
-    }
+    GLColorDrawProgram::getInstance()->setupObjectMatrix(this->_transformMatrix.mat);
+    GLColorDrawProgram::getInstance()->setupProjectionMatrix(GLSupport::projectionMatrix->mat);
+    GLColorDrawProgram::getInstance()->setupModelViewMatrix(GLSupport::modelViewMatrix->mat);
+    GLColorDrawProgram::getInstance()->setFloat1ForUniform(DefaultUniform::GL_AlphaValue,
+                                                             this->getAlphaValue());
 }
 
 void GLColorLayer::visit()
