@@ -115,6 +115,7 @@
 		9D7FA13419167F5E00061A51 /* GLValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D7FA13219167F5E00061A51 /* GLValue.cpp */; };
 		9D8EF12918768D0700704CDC /* GLBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D8EF12718768D0700704CDC /* GLBase.cpp */; };
 		9D91F1001918A862006B9FF7 /* CocoaTextRenderSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9D91F0FF1918A862006B9FF7 /* CocoaTextRenderSupport.mm */; };
+		9DAA8725192C93D200BBEAAC /* GLLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DAA8723192C93D200BBEAAC /* GLLight.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -313,6 +314,8 @@
 		9DA8EBC618472B9200D91848 /* GLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTexture.h; sourceTree = "<group>"; };
 		9DA8EBC918472BA800D91848 /* GLProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProgram.cpp; sourceTree = "<group>"; };
 		9DA8EBCA18472BA800D91848 /* GLProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProgram.h; sourceTree = "<group>"; };
+		9DAA8723192C93D200BBEAAC /* GLLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLLight.cpp; sourceTree = "<group>"; };
+		9DAA8724192C93D200BBEAAC /* GLLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLight.h; sourceTree = "<group>"; };
 		9DD8B45718482AB800E2A7C0 /* GLRenderPlatformHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GLRenderPlatformHelper.mm; sourceTree = "<group>"; };
 		9DD8B45818482AB800E2A7C0 /* GLRenderPlatformHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRenderPlatformHelper.h; sourceTree = "<group>"; };
 		9DD8B45B18482DFF00E2A7C0 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -721,6 +724,8 @@
 				9DD8B4671848357400E2A7C0 /* Utilities.cpp */,
 				9DD8B4661848335D00E2A7C0 /* GLRenderDef.h */,
 				9D05165718713E3F00B246FA /* DefaultShader.h */,
+				9DAA8723192C93D200BBEAAC /* GLLight.cpp */,
+				9DAA8724192C93D200BBEAAC /* GLLight.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -874,6 +879,7 @@
 				9D05161C18710FBE00B246FA /* mat4.c in Sources */,
 				9D0516B118714F8500B246FA /* ltm.c in Sources */,
 				9D0516A818714F8500B246FA /* lobject.c in Sources */,
+				9DAA8725192C93D200BBEAAC /* GLLight.cpp in Sources */,
 				9D05161D18710FBE00B246FA /* neon_matrix_impl.c in Sources */,
 				9D05161E18710FBE00B246FA /* plane.c in Sources */,
 				9D05161F18710FBE00B246FA /* quaternion.c in Sources */,
